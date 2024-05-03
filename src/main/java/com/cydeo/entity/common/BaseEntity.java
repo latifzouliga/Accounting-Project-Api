@@ -1,8 +1,6 @@
 package com.cydeo.entity.common;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 
 import java.time.LocalDateTime;
@@ -10,14 +8,15 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public class BaseEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, updatable = false)
     private LocalDateTime insertDateTime;
     @Column(nullable = false)
-    private LocalDateTime lastInsertedTime;
+    private LocalDateTime lastUpdateDateTime;
     @Column(nullable = false, updatable = false)
-    private Long insertedUserId;
+    private Long insertUserId;
     @Column(nullable = false)
-    private Long lastInsertedUserId;
+    private Long lastUpdateUserId;
     private boolean isDeleted;
 }
