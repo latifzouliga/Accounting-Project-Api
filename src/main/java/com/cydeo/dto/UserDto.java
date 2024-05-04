@@ -15,4 +15,8 @@ public record UserDto (
         CompanyDto company,
         boolean isOnlyAdmin         //(should be true if this user is only admin of any company.)
 ){
+//  public UserDto(){
+//      this(null,null,null,null,null,null,null,null,null,false);
+//  }
+
 }
