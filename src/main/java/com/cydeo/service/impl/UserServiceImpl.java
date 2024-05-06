@@ -1,7 +1,7 @@
 package com.cydeo.service.impl;
 
 import com.cydeo.dto.UserDto;
-import com.cydeo.entity.MapperUtil;
+import com.cydeo.mapper.MapperUtil;
 import com.cydeo.entity.User;
 import com.cydeo.exception.UserNotFoundException;
 import com.cydeo.repository.UserRepository;
@@ -20,15 +20,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final MapperUtil mapperUtil;
-    private final KeycloakService keycloakService;
     private final PasswordEncoder passwordEncoder;
 
 
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, MapperUtil mapperUtil, KeycloakService keycloakService, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository,
+                           ModelMapper modelMapper,
+                           MapperUtil mapperUtil,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.mapperUtil = mapperUtil;
-        this.keycloakService = keycloakService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -51,13 +52,10 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(true);
         user.setInsertDateTime(LocalDateTime.now());
         user.setLastUpdateDateTime(LocalDateTime.now());
-        //hardcoding user Ids
         user.setLastUpdateUserId(1L);
         user.setInsertUserId(1L);
-        System.out.println(user);
-        System.out.println(userDto);
         userRepository.save(user);
-        keycloakService.userCreate(userDto);
+        //keycloakService.userCreate(userDto);
 
         return userDto;
     }
