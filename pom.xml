@@ -65,6 +65,26 @@
             <artifactId>keycloak-spring-boot-starter</artifactId>
             <version>24.0.3</version>
         </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.keycloak</groupId>-->
+        <!--            <artifactId>keycloak-admin-client</artifactId>-->
+        <!--            <version>24.0.3</version>-->
+        <!--        </dependency>-->
+                <dependency>
+                    <groupId>jakarta.ws.rs</groupId>
+                    <artifactId>jakarta.ws.rs-api</artifactId>
+                    <version>3.0.0</version>
+                </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.hibernate.validator</groupId>-->
+        <!--            <artifactId>hibernate-validator</artifactId>-->
+        <!--            <version>8.0.1.Final</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.keycloak</groupId>-->
+        <!--            <artifactId>keycloak-spring-security-adapter</artifactId>-->
+        <!--            <version>24.0.3</version>-->
+        <!--        </dependency>-->
 
 
     </dependencies>
