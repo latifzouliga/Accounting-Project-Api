@@ -1,14 +1,13 @@
 package com.cydeo.entity;
 
 import com.cydeo.entity.common.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.Where;
 
+@ToString
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -24,6 +23,7 @@ public class User extends BaseEntity {
     private boolean enabled;
 
     @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;  // many-to-one / will be seen under "role_id" column on the "users" table
 
     @ManyToOne

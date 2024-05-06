@@ -1,15 +1,20 @@
 package com.cydeo.dto;
 
 import com.cydeo.enums.CompanyStatus;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
-public record CompanyDto(
-        Long id,
-        String title,
-        String phone,
-        String website,
-        AddressDto address,
-        CompanyStatus companyStatus
-) {
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class CompanyDto {
+    private Long id;
+    private String title;
+    private String phone;
+    private String website;
+    private AddressDto address;
+    private CompanyStatus companyStatus;
 }

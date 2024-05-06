@@ -34,9 +34,9 @@ class UserServiceImplTest {
         String username = "testuser";
         User user = new User();
         UserDto expectedDto = UserDto.builder()
-                .id(1L)
-                .username("username")
-                .lastname("lastname")
+//                .id(1L)
+//                .username("username")
+//                .lastname("lastname")
                 .build();
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));

@@ -34,7 +34,8 @@ public class SecurityFilter {
 //        return http.build();
 
         http.authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET, "/api/admin").hasRole("admin")
+                .requestMatchers( "/api/admin").hasAnyRole("admin")
+//                .requestMatchers(HttpMethod.POST, "/api/admin").hasRole("admin")
                 .requestMatchers(HttpMethod.GET, "/api/user").hasRole("user")
                 .anyRequest().authenticated();
 
