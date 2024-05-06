@@ -1,5 +1,6 @@
 package com.cydeo.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class UserDto {
         private Long id;
         private String username;   // must be unique
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         private String password;
         private String firstname;
         private String lastname;

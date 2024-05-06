@@ -1,6 +1,7 @@
 package com.cydeo.dto;
 
 import com.cydeo.enums.ClientVendorType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 @Builder
@@ -12,6 +13,7 @@ public record ClientVendorDto(
         ClientVendorType clientVendorType,
         AddressDto address,
         CompanyDto company,
+        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         boolean hasInvoice //(only DTO)
 ) {
 }
