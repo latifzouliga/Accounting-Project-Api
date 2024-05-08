@@ -32,36 +32,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     @Override
     public Response userCreate(UserDto userDto) {
 
-//        UserRepresentation keycloakUser = createUserRepresentation(userDto);
-//
-//        // open instance
-//        Keycloak keycloak = getKeycloakInstance();
-//        RealmResource realmResource = keycloak.realm(keycloakProperties.getRealm());
-//        UsersResource usersResource = realmResource.users();
-//
-//        // Create Keycloak user
-//        Response result = usersResource.create(keycloakUser);
-//        String userId = getCreatedId(result);
-//
-//        ClientRepresentation appClient = realmResource.clients()
-//                .findByClientId(keycloakProperties.getClientId())
-//                .get(0);
-//
-//        // getting the role from user, matching that role in keycloak and assigning it to user
-//        RoleRepresentation userClientRole = realmResource.clients()
-//                .get(appClient.getId())
-//                .roles()
-//                .get(userDto.getRole().getDescription())
-//                .toRepresentation();
-//
-//        realmResource.users()
-//                .get(userId)
-//                .roles()
-//                .clientLevel(appClient.getId())
-//                .add(List.of(userClientRole));
-//
-//        keycloak.close();
-//        return result;
+
         try (Keycloak keycloak = getKeycloakInstance()) {
             UserRepresentation keycloakUser = createUserRepresentation(userDto);
             RealmResource realmResource = keycloak.realm(keycloakProperties.getRealm());
