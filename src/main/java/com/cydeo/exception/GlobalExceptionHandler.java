@@ -16,7 +16,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 // interceptor: if any exception happens in this application, it needs to be intercepted and come to this class first
 public class GlobalExceptionHandler {
 
@@ -36,55 +36,55 @@ public class GlobalExceptionHandler {
 //    }
 //
     // any exception related with AccessDeniedException.class
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ResponseWrapper> accessDeniedException(AccessDeniedException se) {
-        String message = se.getMessage();
-        return new ResponseEntity<>(
-
-                ResponseWrapper.builder()
-                        .success(false)
-                        .code(HttpStatus.FORBIDDEN.value())
-                        .message(message)
-                        .build(),
-                HttpStatus.FORBIDDEN);
-    }
+//    @ExceptionHandler(AccessDeniedException.class)
+//    public ResponseEntity<ResponseWrapper> accessDeniedException(AccessDeniedException se) {
+//        String message = se.getMessage();
+//        return new ResponseEntity<>(
+//
+//                ResponseWrapper.builder()
+//                        .success(false)
+//                        .code(HttpStatus.FORBIDDEN.value())
+//                        .message(message)
+//                        .build(),
+//                HttpStatus.FORBIDDEN);
+//    }
 
     // any exception related with these 4 classes
-    @ExceptionHandler({Exception.class, RuntimeException.class, Throwable.class, BadCredentialsException.class})
-    public ResponseEntity<ResponseWrapper> genericException(HandlerMethod handlerMethod) {
+//    @ExceptionHandler({Exception.class, RuntimeException.class, Throwable.class, BadCredentialsException.class})
+//    public ResponseEntity<ResponseWrapper> genericException(HandlerMethod handlerMethod) {
+//
+//
+//        // the first condition will execute if the exception happens in methods that are annotated with @DefaultExceptionMessage
+//        Optional<DefaultExceptionMessageDto> defaultMessage = getMessageFromAnnotation(handlerMethod.getMethod());
+//
+//        if (defaultMessage.isPresent() && !ObjectUtils.isEmpty(defaultMessage.get().getMessage())) {
+//            ResponseWrapper response = ResponseWrapper
+//                    .builder()
+//                    .success(false)
+//                    .message(defaultMessage.get().getMessage())
+//                    .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+//                    .build();
+//            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//
+//        return new ResponseEntity<>(
+//                ResponseWrapper.builder()
+//                        .success(false)
+//                        .message(defaultMessage.get().getMessage())
+//                        .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+//                        .build(),
+//                HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
-
-        // the first condition will execute if the exception happens in methods that are annotated with @DefaultExceptionMessage
-        Optional<DefaultExceptionMessageDto> defaultMessage = getMessageFromAnnotation(handlerMethod.getMethod());
-
-        if (defaultMessage.isPresent() && !ObjectUtils.isEmpty(defaultMessage.get().getMessage())) {
-            ResponseWrapper response = ResponseWrapper
-                    .builder()
-                    .success(false)
-                    .message(defaultMessage.get().getMessage())
-                    .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        return new ResponseEntity<>(
-                ResponseWrapper.builder()
-                        .success(false)
-                        .message(defaultMessage.get().getMessage())
-                        .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .build(),
-                HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    private Optional<DefaultExceptionMessageDto> getMessageFromAnnotation(Method method) {
-        DefaultExceptionMessage defaultExceptionMessage = method.getAnnotation(DefaultExceptionMessage.class);
-        if (defaultExceptionMessage != null) {
-            DefaultExceptionMessageDto defaultExceptionMessageDto = DefaultExceptionMessageDto
-                    .builder()
-                    .message(defaultExceptionMessage.defaultMessage())
-                    .build();
-            return Optional.of(defaultExceptionMessageDto);
-        }
-        return Optional.empty();
-    }
+//    private Optional<DefaultExceptionMessageDto> getMessageFromAnnotation(Method method) {
+//        DefaultExceptionMessage defaultExceptionMessage = method.getAnnotation(DefaultExceptionMessage.class);
+//        if (defaultExceptionMessage != null) {
+//            DefaultExceptionMessageDto defaultExceptionMessageDto = DefaultExceptionMessageDto
+//                    .builder()
+//                    .message(defaultExceptionMessage.defaultMessage())
+//                    .build();
+//            return Optional.of(defaultExceptionMessageDto);
+//        }
+//        return Optional.empty();
+//    }
 }

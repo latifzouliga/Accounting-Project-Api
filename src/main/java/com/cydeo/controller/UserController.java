@@ -4,6 +4,7 @@ import com.cydeo.dto.UserDto;
 import com.cydeo.entity.ResponseWrapper;
 import com.cydeo.service.KeycloakService;
 import com.cydeo.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/users")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
 
     private final UserService userService;
@@ -25,7 +27,7 @@ public class UserController {
     }
 
 
-    @PreAuthorize("(hasRole('Admin'))")
+    @PreAuthorize("hasRole('Admin')")
     @PostMapping("/create")
     public ResponseEntity<ResponseWrapper> create(@RequestBody UserDto userDto) {
         UserDto user = userService.save(userDto);
@@ -40,5 +42,13 @@ public class UserController {
                         .build()
                 );
     }
+
+    @PreAuthorize("hasRole('Admin')")
+    @GetMapping
+    public ResponseEntity<String> get(){
+        return ResponseEntity.ok("Hello Root Or Admin");
+    }
+
+
 
 }
