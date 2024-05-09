@@ -1,0 +1,64 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: Accounting Application
+  datasource:
+    url: jdbc:postgresql://localhost:5432/accounting-group-3
+    username: postgres
+    password: DataMind
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
+  main:
+    allow-circular-references: true
+  sql:
+    init:
+      mode: always
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${keycloak.auth-server-url}/realms/zouliga-dev
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+jwt:
+  auth:
+    converter:
+      resource-id: ${keycloak.resource}
+      principle-attribute: preferred_username
+
+keycloak:
+  realm: zouliga-dev
+  auth-server-url: http://localhost:8080
+  ssl-required: external
+  resource: Accounting-Project-Api
+  credentials:
+    secret: aC6w0mwERcfbT7iy0bYO76kjQFldFWE9
+  use-resource-role-mappings: true
+  bearer-only: true
+
+
+master:
+  user: admin
+  password: admin
+  realm: master
+  client: master-client
+
+### countries list
+#country:
+#    api:
+#      email: ap.cydeo@gmail.com
+#      token: token=guHIffIBNGDFLlWJ3Db8HRrife99voQzn-go0bWhPgPh6rDm1xLBUxzbFB2XhyCNRWM
+#
+### stripe
+#stripe:
+#  public:
+#    key: pk_test_51P6ex0DZFwEius7mXDCyyZM4wxzWhrKi3IBGigZiXWNP8ajyz8yC8b2YLcWj1CYtSiGKZEGgu3C3kF8kTAWmJ11C00YNhZvYuP
+#  secret: sk_test_51P6ex0DZFwEius7mp1NH0CcvQy81Rl0hLfkEE97S032IRX2OLXetv4pPGMrmz6kEgEzG9MdwOTkaYsu0Rk6LSOli00QUQTzDk6

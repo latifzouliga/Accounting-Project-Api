@@ -82,11 +82,6 @@ public class KeycloakServiceImpl implements KeycloakService {
         keycloak.close();
     }
 
-    @Override
-    public UserDto getLoggedInUser() {
-
-        return null;
-    }
 
     private UserRepresentation createUserRepresentation(UserDto userDto) {
         // filling user info in keycloak application

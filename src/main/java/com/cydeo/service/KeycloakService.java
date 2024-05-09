@@ -9,5 +9,5 @@ public interface KeycloakService {
 
     Response userCreate(UserDto userDto);
     void delete(String username);
-    UserDto getLoggedInUser();
+
 }

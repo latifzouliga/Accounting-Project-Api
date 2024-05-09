@@ -1,44 +1,44 @@
 package com.cydeo.controller;
 
 import com.cydeo.dto.UserDto;
-import com.cydeo.entity.User;
+import com.cydeo.entity.ResponseWrapper;
+import com.cydeo.service.KeycloakService;
 import com.cydeo.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
 
-	private final UserService userService;
+    private final UserService userService;
 
 
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-	@GetMapping("/me")
-	@ResponseBody
-	public ResponseEntity<User> getUserInfo(@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(userService.getLoggedInUser());
-	}
 
-	@GetMapping("/admin")
-	public ResponseEntity<String> getAdminDetails() {
-		return ResponseEntity.ok("Hello admin");
-	}
-
-	@GetMapping("/user")
-	public ResponseEntity<String> getUserDetails() {
-		return ResponseEntity.ok("Hello User");
-	}
-
-	@PostMapping("/admin")
-	public ResponseEntity<String> create(@RequestBody UserDto userDto) {
-		userService.save(userDto);
-		return ResponseEntity.ok("Hello admin");
-	}
+    @PreAuthorize("(hasRole('Admin'))")
+    @PostMapping("/create")
+    public ResponseEntity<ResponseWrapper> create(@RequestBody UserDto userDto) {
+        UserDto user = userService.save(userDto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ResponseWrapper.builder()
+                        .code(HttpStatus.CREATED.value())
+                        .success(true)
+                        .message("User created successfully")
+                        .data(user)
+                        .build()
+                );
+    }
 
 }

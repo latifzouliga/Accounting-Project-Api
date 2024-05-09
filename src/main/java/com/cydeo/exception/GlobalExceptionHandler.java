@@ -53,6 +53,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({Exception.class, RuntimeException.class, Throwable.class, BadCredentialsException.class})
     public ResponseEntity<ResponseWrapper> genericException(HandlerMethod handlerMethod) {
 
+
         // the first condition will execute if the exception happens in methods that are annotated with @DefaultExceptionMessage
         Optional<DefaultExceptionMessageDto> defaultMessage = getMessageFromAnnotation(handlerMethod.getMethod());
 
@@ -69,7 +70,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 ResponseWrapper.builder()
                         .success(false)
-                        .message("Action failed: An error occurred! You need to be careful bro!!!")
+                        .message(defaultMessage.get().getMessage())
                         .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .build(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
@@ -83,8 +84,6 @@ public class GlobalExceptionHandler {
                     .message(defaultExceptionMessage.defaultMessage())
                     .build();
             return Optional.of(defaultExceptionMessageDto);
-            //DefaultExceptionMessageDTO message = new DefaultExceptionMessageDTO(defaultExceptionMessage.defaultMessage());
-//            return Optional.of(message);
         }
         return Optional.empty();
     }
