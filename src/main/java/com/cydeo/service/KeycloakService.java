@@ -9,5 +9,6 @@ public interface KeycloakService {
 
     Response userCreate(UserDto userDto);
     void delete(String username);
+    void deleteAllOrphanedUsers();
 
 }

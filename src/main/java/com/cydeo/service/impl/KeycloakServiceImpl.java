@@ -2,12 +2,13 @@ package com.cydeo.service.impl;
 
 import com.cydeo.config.KeycloakProperties;
 import com.cydeo.dto.UserDto;
+import com.cydeo.entity.User;
+import com.cydeo.repository.UserRepository;
 import com.cydeo.service.KeycloakService;
 
 
 import jakarta.ws.rs.core.Response;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.ClientRepresentation;
@@ -24,9 +25,12 @@ import static org.keycloak.admin.client.CreatedResponseUtil.getCreatedId;
 public class KeycloakServiceImpl implements KeycloakService {
 
     private final KeycloakProperties keycloakProperties;
+    private final UserRepository userRepository;
 
-    public KeycloakServiceImpl(KeycloakProperties keycloakProperties) {
+    public KeycloakServiceImpl(KeycloakProperties keycloakProperties,
+                               UserRepository userRepository) {
         this.keycloakProperties = keycloakProperties;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -107,5 +111,29 @@ public class KeycloakServiceImpl implements KeycloakService {
         return Keycloak.getInstance(keycloakProperties.getAuthServerUrl(),
                 keycloakProperties.getMasterRealm(), keycloakProperties.getMasterUser(),
                 keycloakProperties.getMasterUserPswd(), keycloakProperties.getMasterClient());
+    }
+
+
+
+    /*
+        when we create a user from this application, it will create a user in the application database and in keycloak
+        database, but when the application goes off the users in application database will be deleted automatically
+        and the users in keycloak will still remain
+        With this issue the keycloak database will be cluttered with orphaned users and this deleteAll() method will
+        always check both app database and keycloak database and when there is orphaned users it will delete the at
+        the application start up
+     */
+    @Override
+    public void deleteAllOrphanedUsers(){
+
+        List<String> userList = userRepository.findAll().stream().map(User::getUsername).toList();
+        RealmResource realmResource = getKeycloakInstance().realm(keycloakProperties.getRealm());
+        List<UserRepresentation> keycloakUsers = realmResource.users().list();
+
+        for (UserRepresentation each : keycloakUsers) {
+            if (!userList.contains(each.getUsername())){
+                delete(each.getUsername());
+            }
+        }
     }
 }

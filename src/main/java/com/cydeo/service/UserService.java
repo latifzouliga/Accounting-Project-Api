@@ -10,4 +10,5 @@ public interface UserService {
     User getLoggedInUser();
     UserDto save(UserDto userDto);
 
+
 }
