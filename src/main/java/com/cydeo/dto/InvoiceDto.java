@@ -2,6 +2,7 @@ package com.cydeo.dto;
 
 import com.cydeo.enums.InvoiceStatus;
 import com.cydeo.enums.InvoiceType;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record InvoiceDto(
         Long id,
         String invoiceNo,

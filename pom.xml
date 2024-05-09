@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.6</version>
+        <version>3.2.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.cydeo</groupId>
@@ -52,11 +52,6 @@
             <artifactId>modelmapper</artifactId>
             <version>3.2.0</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.modelmapper</groupId>-->
-<!--            <artifactId>modelmapper-module-record</artifactId>-->
-<!--            <version>1.0.0</version>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -77,11 +72,11 @@
             <version>24.0.3</version>
         </dependency>
 
-    <dependency>
-        <groupId>org.keycloak</groupId>
-        <artifactId>keycloak-servlet-filter-adapter</artifactId>
-        <version>24.0.3</version>
-    </dependency>
+<!--    <dependency>-->
+<!--        <groupId>org.keycloak</groupId>-->
+<!--        <artifactId>keycloak-servlet-filter-adapter</artifactId>-->
+<!--        <version>24.0.3</version>-->
+<!--    </dependency>-->
 
 
         <dependency>
