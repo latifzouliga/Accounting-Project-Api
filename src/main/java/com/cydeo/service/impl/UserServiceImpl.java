@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -120,6 +121,41 @@ public class UserServiceImpl implements UserService {
             return listAllAdmins(pageNo, pageSize);
         }
         return listAllUsersByCompany(getCompanyTitle());
+    }
+
+    @Override
+    public UserDto update(UserDto userDto) {
+        User user = userRepository.findByUsername(userDto.getUsername())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        userDto.setId(user.getId());
+        User updatedUser = mapper.convert(userDto, new User());
+        updatedUser.setInsertDateTime(LocalDateTime.now());
+        updatedUser.setLastUpdateDateTime(LocalDateTime.now());
+        updatedUser.setLastUpdateUserId(1L);
+        updatedUser.setInsertUserId(1L);
+        userRepository.save(updatedUser);
+        return userDto;
+    }
+
+    @Override
+    public UserDto update(String username, Map<String, Object> fieldToBeUpdated) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        for (Map.Entry<String, Object> entry : fieldToBeUpdated.entrySet()) {
+            String field = entry.getKey();
+            Object value = entry.getValue();
+
+            switch (field) {
+                case "firstname" -> user.setFirstname((String) value);
+                case "lastname" -> user.setLastname((String) value);
+                case "password" -> user.setPassword((String) value);
+                case "phone" -> user.setPhone((String) value);
+                case "enabled" -> user.setEnabled((boolean) value);
+            }
+        }
+        return mapper.convert(user, new UserDto());
     }
 
     private boolean isOnlyAdmin(UserDto userDto) {

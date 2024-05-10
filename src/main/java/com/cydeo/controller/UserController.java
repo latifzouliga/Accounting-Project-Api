@@ -4,7 +4,10 @@ import com.cydeo.dto.UserDto;
 import com.cydeo.entity.ResponseWrapper;
 import com.cydeo.service.KeycloakService;
 import com.cydeo.service.UserService;
+import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,7 +18,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -34,6 +39,7 @@ public class UserController {
 
     /**
      * Create User: {@link UserService#save(UserDto)}
+     *
      * @param userDto
      */
     @Operation(
@@ -59,7 +65,6 @@ public class UserController {
                         .build()
                 );
     }
-    
 
 
     /**
@@ -89,6 +94,74 @@ public class UserController {
                         .message("Users fetched successfully")
                         .data(userList)
                         .size(userList.size())
+                        .build()
+        );
+    }
+
+    /**
+     * {@link UserService#update(UserDto)}
+     *
+     * @param userDto
+     */
+    @Operation(
+            description = "Put endpoint for updating user",
+            summary = "Only Root and Admin with Root or Admin Roles can execute this endpoint",
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
+            }
+    )
+    @PreAuthorize("hasAnyRole('Root','Admin')")
+    @PutMapping("/update")
+    public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDto userDto) {
+        UserDto user = userService.update(userDto);
+        return ResponseEntity.ok(
+                ResponseWrapper.builder()
+                        .code(HttpStatus.OK.value())
+                        .success(true)
+                        .message("Users updated successfully")
+                        .data(user)
+                        .build()
+        );
+    }
+
+    /**
+     * This method can be used to update one or more fields
+     * {@link UserService#update(String, Map)}
+     * @param username
+     * @param field
+     */
+    @Operation(
+            description = "Put endpoint for updating user",
+            summary = "Only Root and Admin with Root or Admin Roles can execute this endpoint",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = """
+                            Please enter the field needs to be updated as key and value
+                            </br></br></br>
+                            Example: <strong>"firstname":"string"</strong>
+                            """,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = HashMap.class)
+                    )
+            ),
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
+            }
+    )
+    @PreAuthorize("hasAnyRole('Root','Admin')")
+    @PatchMapping("/update/{username}")
+    public ResponseEntity<ResponseWrapper> patchUser(@PathVariable String username,
+                                                     @RequestBody() Map<String, Object> field) {
+
+        UserDto user = userService.update(username, field);
+        return ResponseEntity.ok(
+                ResponseWrapper.builder()
+                        .code(HttpStatus.OK.value())
+                        .success(true)
+                        .message("Users updated successfully")
+                        .data(user)
                         .build()
         );
     }

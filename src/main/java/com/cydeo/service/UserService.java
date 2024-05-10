@@ -4,6 +4,7 @@ import com.cydeo.dto.UserDto;
 import com.cydeo.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -15,4 +16,6 @@ public interface UserService {
     List<UserDto> listAllUsersByCompany(String companyTitle);
     List<UserDto> listAllAdmins(int pageNo, int size);
     List<UserDto> listAllFilteredUsers(int pageNo, int size);
+    UserDto update(UserDto userDto);
+    UserDto update(String username, Map<String, Object> field);
 }
