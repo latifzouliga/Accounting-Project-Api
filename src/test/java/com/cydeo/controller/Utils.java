@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.Objects;
 
-class Utils {
+public class Utils {
 
     static String USERNAME;
     static final String PASSWORD = "Abc1";
@@ -27,7 +27,7 @@ class Utils {
     }
 
     static String getAdminToken() {
-        USERNAME = "admin@admin.com";
+        USERNAME = "admin@bluetech.com";
         return getToken(USERNAME, PASSWORD);
     }
     static String getAdminToken(String username,String password) {
@@ -35,7 +35,7 @@ class Utils {
     }
 
     static String getManagerToken() {
-        USERNAME = "manager@manager.com";
+        USERNAME = "manager@bluetech.com";
         return getToken(USERNAME, PASSWORD);
     }
     static String getManagerToken(String username,String password) {
@@ -43,7 +43,7 @@ class Utils {
     }
 
     static String getEmployeeToken() {
-        USERNAME = "employee@employee.com";
+        USERNAME = "employee@bluetech.com";
         return getToken(USERNAME, PASSWORD);
     }
     static String getEmployeeToken(String username,String password) {

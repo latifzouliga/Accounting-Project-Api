@@ -1,9 +1,14 @@
 package com.cydeo.service.impl;
 
+import com.cydeo.dto.CompanyDto;
 import com.cydeo.dto.RoleDto;
 import com.cydeo.dto.UserDto;
+import com.cydeo.entity.Role;
 import com.cydeo.entity.User;
+import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.UserRepository;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Tag("User service")
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
@@ -25,23 +31,32 @@ class UserServiceImplTest {
     private UserRepository userRepository;
     @InjectMocks
     private UserServiceImpl userService;
-    @Mock
-    private ModelMapper modelMapper;
+    @Spy
+    private MapperUtil mapperUtil = new MapperUtil(new ModelMapper());
 
+    @DisplayName("Find user by username")
     @Test
     void findByUsername() {
 
         String username = "testuser";
         User user = new User();
+                user.setId(1L);
+                user.setFirstname("mike");
+                user.setLastname("can");
+                user.setUsername(username);
+                user.setPassword("Abc1");
+
         UserDto expectedDto = UserDto.builder()
-//                .id(1L)
-//                .username("username")
-//                .lastname("lastname")
+                .id(1L)
+                .firstname("mike")
+                .lastname("can")
+                .username(username)
+                .password("Abc1")
                 .build();
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
-        when(modelMapper.map(user, UserDto.class)).thenReturn(expectedDto);
         UserDto actualDto = userService.findByUsername(username);
+        verify(userRepository).findByUsername(username);
         assertEquals(expectedDto, actualDto);
 
     }
