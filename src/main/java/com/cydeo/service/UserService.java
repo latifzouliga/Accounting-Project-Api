@@ -3,12 +3,16 @@ package com.cydeo.service;
 import com.cydeo.dto.UserDto;
 import com.cydeo.entity.User;
 
+import java.util.List;
+
 public interface UserService {
 
     UserDto findByUsername(String username);
 
     User getLoggedInUser();
     UserDto save(UserDto userDto);
-
-
+    List<UserDto> listAllUsersByCompany(String companyTitle, int pageNo, int size);
+    List<UserDto> listAllUsersByCompany(String companyTitle);
+    List<UserDto> listAllAdmins(int pageNo, int size);
+    List<UserDto> listAllFilteredUsers(int pageNo, int size);
 }

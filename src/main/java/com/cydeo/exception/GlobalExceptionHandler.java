@@ -4,11 +4,13 @@ package com.cydeo.exception;
 import com.cydeo.annotation.DefaultExceptionMessage;
 import com.cydeo.dto.DefaultExceptionMessageDto;
 import com.cydeo.entity.ResponseWrapper;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.HandlerMethod;
@@ -16,7 +18,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-//@RestControllerAdvice
+@RestControllerAdvice
 // interceptor: if any exception happens in this application, it needs to be intercepted and come to this class first
 public class GlobalExceptionHandler {
 
@@ -35,19 +37,31 @@ public class GlobalExceptionHandler {
 //                HttpStatus.CONFLICT);
 //    }
 //
-    // any exception related with AccessDeniedException.class
-//    @ExceptionHandler(AccessDeniedException.class)
-//    public ResponseEntity<ResponseWrapper> accessDeniedException(AccessDeniedException se) {
-//        String message = se.getMessage();
-//        return new ResponseEntity<>(
-//
-//                ResponseWrapper.builder()
-//                        .success(false)
-//                        .code(HttpStatus.FORBIDDEN.value())
-//                        .message(message)
-//                        .build(),
-//                HttpStatus.FORBIDDEN);
-//    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ResponseWrapper> accessDeniedException(AccessDeniedException se) {
+        String message = se.getMessage();
+        return new ResponseEntity<>(
+
+                ResponseWrapper.builder()
+                        .success(false)
+                        .code(HttpStatus.FORBIDDEN.value())
+                        .message(message)
+                        .build(),
+                HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ResponseWrapper> validationException(ConstraintViolationException se) {
+        String message = se.getMessage();
+        return new ResponseEntity<>(
+                ResponseWrapper.builder()
+                        .success(false)
+                        .code(HttpStatus.FORBIDDEN.value())
+                        .message(message)
+                        .build(),
+                HttpStatus.FORBIDDEN);
+    }
 
     // any exception related with these 4 classes
 //    @ExceptionHandler({Exception.class, RuntimeException.class, Throwable.class, BadCredentialsException.class})

@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,6 +20,7 @@ public class ResponseWrapper {
     private String message;
     private Integer code;
     private Object data;
+    private int size;
 
     public ResponseWrapper(String message, Object data, HttpStatus httpStatus) {
         this.success = true;
@@ -29,4 +34,5 @@ public class ResponseWrapper {
         this.code = httpStatus.value();
         this.success = true;
     }
+
 }

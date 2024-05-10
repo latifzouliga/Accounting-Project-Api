@@ -34,6 +34,9 @@ class UserServiceImplTest {
     @Spy
     private MapperUtil mapperUtil = new MapperUtil(new ModelMapper());
 
+    /**
+     * Test Find By Username: {@link UserServiceImpl#findByUsername(String)}
+     */
     @DisplayName("Find user by username")
     @Test
     void findByUsername() {
@@ -61,4 +64,28 @@ class UserServiceImplTest {
 
     }
 
+    // TODO:
+
+    /**
+     * Test List All Users By Company: {@link UserServiceImpl#listAllUsersByCompany(String, int, int)}
+     */
+    @Test
+    void listAllUsersByCompany() {
+    }
+
+    /**
+     * Test List All users By Company: {@link UserServiceImpl#listAllUsersByCompany(String)}
+     */
+    @Test
+    void testListAllUsersByCompany() {
+
+    }
+
+    @Test
+    void listAllAdmins() {
+    }
+
+    @Test
+    void listAllFilteredUsers() {
+    }
 }
