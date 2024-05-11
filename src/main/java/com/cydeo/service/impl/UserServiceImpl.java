@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -156,6 +157,37 @@ public class UserServiceImpl implements UserService {
             }
         }
         return mapper.convert(user, new UserDto());
+    }
+
+    @Override
+    public void delete(String username) {
+
+        User loggedInUser = getLoggedInUser();
+        List<UserDto> userList = listAllUsersByCompany(getCompanyTitle());
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        boolean isAdmin = user.getRole().getDescription().equalsIgnoreCase("Admin");
+        boolean isRootUser = user.getRole().getDescription().equalsIgnoreCase("Root User");
+
+        if (username.equalsIgnoreCase(loggedInUser.getUsername())) {
+            throw new RuntimeException("You are the Admin. You can not delete yourself");
+        }
+
+        if (!isAdmin) {
+            user.setDeleted(true);
+        }
+        if (!isRootUser) {
+            user.setDeleted(true);
+        } else {
+            userList.forEach(each -> {
+                if (each.isOnlyAdmin()) {
+                    throw new RuntimeException(username + " is only admin");
+                }
+                user.setDeleted(true);
+            });
+        }
+        userRepository.save(user);
+
     }
 
     private boolean isOnlyAdmin(UserDto userDto) {

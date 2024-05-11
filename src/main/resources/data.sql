@@ -69,19 +69,21 @@ values
 -- COMPANY-4 / Red Tech / ADMIN
 ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
  'admin@redtech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
- 'John', 'Doe', '+1 (659) 756-1265', 2, 4, true);
+ 'John', 'Doe', '+1 (659) 756-1265', 2, 4, true),
 -- ///////////////////
 
-
--- ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
---     'manager22@bluetech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
---     'Tom', 'Hanks', '+1 (356) 258-3544', 3, 3, true),
--- ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
---  'manager222@bluetech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
---  'Tom', 'Hanks', '+1 (356) 258-3544', 3, 3, true),
--- ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
---  'manager22222@bluetech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
---  'Tom', 'Hanks', '+1 (356) 258-3544', 3, 3, true);
+('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
+ 'admin2@bluetech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+ 'zouliga', 'Brown', '+1 (356) 258-3544', 2, 3, true),
+('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
+    'manager2@bluetech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+    'Tom and jerry', 'Hanks', '+1 (356) 258-3544', 3, 3, true),
+('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
+ 'employee4@bluetech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+ 'Mike', 'Hanks', '+1 (356) 258-3544', 4, 3, true),
+('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
+ 'employee3@bluetech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+ 'Zaid', 'Hanks', '+1 (356) 258-3544', 4, 3, true);
 
 insert into clients_vendors(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                             client_vendor_type, client_vendor_name, phone, website, address_id, company_id)

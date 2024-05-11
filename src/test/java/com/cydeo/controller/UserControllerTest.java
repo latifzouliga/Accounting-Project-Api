@@ -5,14 +5,11 @@ import com.cydeo.dto.RoleDto;
 import com.cydeo.dto.UserDto;
 import com.cydeo.enums.CompanyStatus;
 import com.cydeo.mapper.MapperUtil;
-import com.cydeo.service.UserService;
 import com.cydeo.service.impl.UserServiceImpl;
-import org.jboss.resteasy.spi.touri.MappedBy;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
@@ -22,12 +19,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.cydeo.controller.Utils.toJsonString;
+import static com.cydeo.controller.Utility.toJsonString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -78,7 +73,7 @@ public class UserControllerTest {
                 .role(role)
                 .build();
 
-        bearerToken = "Bearer " + Utils.getAdminToken();
+        bearerToken = "Bearer " + Utility.getAdminToken();
 
     }
 

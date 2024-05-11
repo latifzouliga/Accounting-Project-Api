@@ -18,4 +18,5 @@ public interface UserService {
     List<UserDto> listAllFilteredUsers(int pageNo, int size);
     UserDto update(UserDto userDto);
     UserDto update(String username, Map<String, Object> field);
+    void delete(String username);
 }

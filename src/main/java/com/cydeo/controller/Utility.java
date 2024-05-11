@@ -6,52 +6,53 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Objects;
 
-class Utils {
+public class Utility {
 
-    static String USERNAME;
-    static final String PASSWORD = "Abc1";
+    public static String USERNAME;
+    public static final String PASSWORD = "Abc1";
 
 
-    static String getRootToken() {
+    public static String getRootToken() {
         USERNAME = "root@cydeo.com";
         return getToken(USERNAME, PASSWORD);
     }
 
-    static String getRootToken(String username,String password) {
+    public static String getRootToken(String username,String password) {
         return getToken(username,password);
     }
 
-    static String getAdminToken() {
+    public static String getAdminToken() {
         USERNAME = "admin@bluetech.com";
         return getToken(USERNAME, PASSWORD);
     }
-    static String getAdminToken(String username,String password) {
+    public static String getAdminToken(String username,String password) {
         return getToken(username,password);
     }
 
-    static String getManagerToken() {
+    public static String getManagerToken() {
         USERNAME = "manager@bluetech.com";
         return getToken(USERNAME, PASSWORD);
     }
-    static String getManagerToken(String username,String password) {
+    public static String getManagerToken(String username,String password) {
         return getToken(username,password);
     }
 
-    static String getEmployeeToken() {
+    public static String getEmployeeToken() {
         USERNAME = "employee@bluetech.com";
         return getToken(USERNAME, PASSWORD);
     }
-    static String getEmployeeToken(String username,String password) {
+    public static String getEmployeeToken(String username,String password) {
         return getToken(username,password);
     }
 
 
-    private static String getToken(String username, String password) {
+    public static String getToken(String username, String password) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 

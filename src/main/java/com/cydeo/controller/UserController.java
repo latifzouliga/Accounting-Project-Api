@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -128,6 +129,7 @@ public class UserController {
     /**
      * This method can be used to update one or more fields
      * {@link UserService#update(String, Map)}
+     *
      * @param username
      * @param field
      */
@@ -138,7 +140,7 @@ public class UserController {
                     description = """
                             Please enter the field needs to be updated as key and value
                             </br></br></br>
-                            Example: <strong>"firstname":"string"</strong>
+                            Example: <strong>{"firstname":"name"}</strong>
                             """,
                     content = @Content(
                             mediaType = "application/json",
@@ -152,7 +154,7 @@ public class UserController {
     )
     @PreAuthorize("hasAnyRole('Root','Admin')")
     @PatchMapping("/update/{username}")
-    public ResponseEntity<ResponseWrapper> patchUser(@PathVariable String username,
+    public ResponseEntity<ResponseWrapper> patchUser(@Valid @PathVariable String username,
                                                      @RequestBody() Map<String, Object> field) {
 
         UserDto user = userService.update(username, field);
@@ -163,6 +165,39 @@ public class UserController {
                         .message("Users updated successfully")
                         .data(user)
                         .build()
+        );
+    }
+
+    /**
+     * 1.  User should be able to delete users through the "User List" page list items
+     *     When user clicks on the "Delete" button, the user should be deleted.
+     *
+     * 2. If the user is the only "Admin" of his/her company, delete button should be disabled and when user hover over
+     *    on this button, it should show "Can not be deleted! This user is only admin for this company or logged in admin.
+     *    " (most part of this feature is from html, backend should send true for isOnlyAdmin field with userDto to disable
+     *    delete button and show the tooltip message.).
+     *
+     * 3. Email should be modified before deletion so that new user can be created with same email.
+     *
+     * 4. After deletion process, user should be able to stay on the "User List" page with refreshed information.
+     *
+     * @return
+     */
+
+    @Operation(
+            description = "Delete endpoint for deleting user",
+            summary = "Only Admin with Root or Admin Role can execute this endpoint",
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
+            }
+    )
+    @PreAuthorize("hasRole('Admin')")
+    @DeleteMapping("/delete/{username}")
+    public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable String username){
+        userService.delete(username);
+        return ResponseEntity.ok(
+                ResponseWrapper.builder().success(true).message("User deleted successfully").build()
         );
     }
 
