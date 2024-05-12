@@ -20,7 +20,7 @@ public class ResponseWrapper {
     private String message;
     private Integer code;
     private Object data;
-    private int size;
+    private Integer size;
 
     public ResponseWrapper(String message, Object data, HttpStatus httpStatus) {
         this.success = true;

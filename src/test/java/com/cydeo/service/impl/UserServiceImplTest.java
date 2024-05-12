@@ -265,7 +265,7 @@ class UserServiceImplTest {
         when(securityService.getLoggedInUser()).thenReturn(loggedInUser);
         when(userRepository.findByUsername(user1.getUsername())).thenReturn(Optional.of(user1));
         when(userRepository.findAllByCompany_Title(company.getTitle())).thenReturn(userList());
-        user1.setDeleted(true);
+        user1.setIsDeleted(true);
 
         userService.delete(user1.getUsername());
 

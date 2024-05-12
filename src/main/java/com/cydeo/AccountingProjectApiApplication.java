@@ -48,7 +48,7 @@ public class AccountingProjectApiApplication {
 
         return args -> {
 
-            keycloakService.deleteAllOrphanedUsers(); //delete orphaned users in keycloak database
+//            keycloakService.deleteAllOrphanedUsers(); //delete orphaned users in keycloak database
 
             String admin = "admin@bluetech.com";
             String root = "root@cydeo.com";
@@ -56,9 +56,9 @@ public class AccountingProjectApiApplication {
 
 
             System.out.println("\n\n\n=====================================================\n\t\tAdmin Token:\n");
-            System.out.println(getToken(admin, password));
+//            System.out.println(getToken(admin, password));
             System.out.println("\n=====================================================\n\t\tRoot Token");
-            System.out.println(getToken(root, password));
+//            System.out.println(getToken(root, password));
         };
 
     }

@@ -108,9 +108,12 @@ public class KeycloakServiceImpl implements KeycloakService {
 
 
     private Keycloak getKeycloakInstance() {
-        return Keycloak.getInstance(keycloakProperties.getAuthServerUrl(),
-                keycloakProperties.getMasterRealm(), keycloakProperties.getMasterUser(),
-                keycloakProperties.getMasterUserPswd(), keycloakProperties.getMasterClient());
+        return Keycloak.getInstance(
+                keycloakProperties.getAuthServerUrl(),
+                keycloakProperties.getMasterRealm(),
+                keycloakProperties.getMasterUser(),
+                keycloakProperties.getMasterUserPswd(),
+                keycloakProperties.getMasterClient());
     }
 
 

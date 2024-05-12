@@ -25,9 +25,12 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/users")
 @SecurityRequirement(name = "bearerAuth")
-@Tag(name = "Users")
+@Tag(name = "Users", description = "Published memes related resources")
+@RequestMapping(
+        value = "/users",
+        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+)
 public class UserController {
 
     private final UserService userService;
@@ -47,13 +50,14 @@ public class UserController {
             description = "Post endpoint for creating user",
             summary = "Only User with Root or Admin Role can execute this endpoint",
             responses = {
-                    @ApiResponse(description = "Success", responseCode = "201"),
+                    @ApiResponse(responseCode = "200",
+                            description = "Retrieve the badge.svg thanks to the redirect"),
                     @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
             }
     )
     @PreAuthorize("hasAnyRole('Admin', 'Root')")
     @PostMapping("/create")
-    public ResponseEntity<ResponseWrapper> create(@RequestBody UserDto userDto) {
+    public ResponseEntity<ResponseWrapper> create(@Valid @RequestBody UserDto userDto) {
         UserDto user = userService.save(userDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -82,7 +86,7 @@ public class UserController {
             }
     )
     @PreAuthorize("hasAnyRole('Root','Admin')")
-    @GetMapping("/list")
+    @GetMapping(value = "/list", produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseWrapper> getAllFilteredUsers(
             @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
@@ -144,7 +148,7 @@ public class UserController {
                             """,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = HashMap.class)
+                            schema = @Schema(implementation = UserDto.class)
                     )
             ),
             responses = {
@@ -169,13 +173,13 @@ public class UserController {
     }
 
 
-
     /**
      * {@link UserService#delete(String)}
      * Admin can delete users if:
      * - user is not the only admin in his company
      * - user is not loggedin user
      * - user is not the root user
+     *
      * @param username
      * @return userDto
      */
@@ -189,18 +193,22 @@ public class UserController {
     )
     @PreAuthorize("hasRole('Admin')")
     @DeleteMapping("/delete/{username}")
-    public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable String username){
+    public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable String username) {
         userService.delete(username);
         return ResponseEntity.ok(
-                ResponseWrapper.builder().success(true).message("User deleted successfully").build()
+                ResponseWrapper.builder()
+                        .success(true)
+                        .code(HttpStatus.NO_CONTENT.value())
+                        .message("User " + username + " deleted successfully")
+                        .build()
         );
     }
 
     /**
      * {@link UserService#findByUsername(String)}
-     * @param username
-     * Admin can view any user in his company
-     * Root User can only search users with admin roles
+     *
+     * @param username Admin can view any user in his company
+     *                 Root User can only search users with admin roles
      */
     @Operation(
             description = "Get endpoint for deleting user",

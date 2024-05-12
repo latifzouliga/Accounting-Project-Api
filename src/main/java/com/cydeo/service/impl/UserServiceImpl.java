@@ -8,6 +8,7 @@ import com.cydeo.repository.UserRepository;
 import com.cydeo.service.KeycloakService;
 import com.cydeo.service.SecurityService;
 import com.cydeo.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -44,39 +45,37 @@ public class UserServiceImpl implements UserService {
     private User getLoggedInUser() {
         return securityService.getLoggedInUser();
     }
+
     @Override
     public UserDto findByUsername(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
-        if (getLoggedInUser().getRole().getDescription().equalsIgnoreCase("Root User")){
-            if (user.getRole().getDescription().equalsIgnoreCase("Admin")){
+        if (getLoggedInUser().getRole().getDescription().equalsIgnoreCase("Root User")) {
+            if (user.getRole().getDescription().equalsIgnoreCase("Admin")) {
                 return mapper.convert(user, new UserDto());
             }
-            throw new UserNotFoundException("No admin found with username: "+ username);
+            throw new UserNotFoundException("No admin found with username: " + username);
         }
         return mapper.convert(user, new UserDto());
     }
 
 
-
-
+    @Transactional
     @Override
     public UserDto save(UserDto userDto) {
         String password = userDto.getPassword();
         User user = mapper.convert(userDto, new User());
-        if (password != null) {
-            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            user.setEnabled(true);
-            user.setPassword(passwordEncoder.encode(password));
+
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setEnabled(true);
+        user.setPassword(passwordEncoder.encode(password));
             user.setInsertDateTime(LocalDateTime.now());
             user.setLastUpdateDateTime(LocalDateTime.now());
-            user.setLastUpdateUserId(1L);
-            user.setInsertUserId(1L);
-            userRepository.save(user);
-            keycloakService.userCreate(userDto);
-            return userDto;
-        } else {
-            throw new RuntimeException("Password can not be null");
-        }
+            user.setLastUpdateUserId(getLoggedInUser().getId());
+            user.setInsertUserId(getLoggedInUser().getId());
+        userRepository.save(user);
+        keycloakService.userCreate(userDto);
+        return userDto;
+
 
     }
 
@@ -132,6 +131,7 @@ public class UserServiceImpl implements UserService {
         return listAllUsersByCompany(getCompanyTitle());
     }
 
+    @Transactional
     @Override
     public UserDto update(UserDto userDto) {
         User user = userRepository.findByUsername(userDto.getUsername())
@@ -139,10 +139,11 @@ public class UserServiceImpl implements UserService {
 
         userDto.setId(user.getId());
         User updatedUser = mapper.convert(userDto, new User());
+        updatedUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         updatedUser.setInsertDateTime(LocalDateTime.now());
         updatedUser.setLastUpdateDateTime(LocalDateTime.now());
-        updatedUser.setLastUpdateUserId(1L);
-        updatedUser.setInsertUserId(1L);
+        updatedUser.setLastUpdateUserId(getLoggedInUser().getId());
+        updatedUser.setInsertUserId(getLoggedInUser().getId());
         userRepository.save(updatedUser);
         return userDto;
     }
@@ -183,16 +184,16 @@ public class UserServiceImpl implements UserService {
         }
 
         if (!isAdmin) {
-            user.setDeleted(true);
+            user.setIsDeleted(true);
         }
         if (!isRootUser) {
-            user.setDeleted(true);
+            user.setIsDeleted(true);
         } else {
             userList.forEach(each -> {
                 if (each.isOnlyAdmin()) {
                     throw new RuntimeException(username + " is only admin");
                 }
-                user.setDeleted(true);
+                user.setIsDeleted(true);
             });
         }
         userRepository.save(user);
