@@ -3,14 +3,10 @@ package com.cydeo.entity;
 import com.cydeo.entity.common.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Where;
 
-@ToString
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

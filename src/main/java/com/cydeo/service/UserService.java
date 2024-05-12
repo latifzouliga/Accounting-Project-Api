@@ -9,8 +9,6 @@ import java.util.Map;
 public interface UserService {
 
     UserDto findByUsername(String username);
-
-    User getLoggedInUser();
     UserDto save(UserDto userDto);
     List<UserDto> listAllUsersByCompany(String companyTitle, int pageNo, int size);
     List<UserDto> listAllUsersByCompany(String companyTitle);

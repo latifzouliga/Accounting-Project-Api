@@ -168,22 +168,17 @@ public class UserController {
         );
     }
 
-    /**
-     * 1.  User should be able to delete users through the "User List" page list items
-     *     When user clicks on the "Delete" button, the user should be deleted.
-     *
-     * 2. If the user is the only "Admin" of his/her company, delete button should be disabled and when user hover over
-     *    on this button, it should show "Can not be deleted! This user is only admin for this company or logged in admin.
-     *    " (most part of this feature is from html, backend should send true for isOnlyAdmin field with userDto to disable
-     *    delete button and show the tooltip message.).
-     *
-     * 3. Email should be modified before deletion so that new user can be created with same email.
-     *
-     * 4. After deletion process, user should be able to stay on the "User List" page with refreshed information.
-     *
-     * @return
-     */
 
+
+    /**
+     * {@link UserService#delete(String)}
+     * Admin can delete users if:
+     * - user is not the only admin in his company
+     * - user is not loggedin user
+     * - user is not the root user
+     * @param username
+     * @return userDto
+     */
     @Operation(
             description = "Delete endpoint for deleting user",
             summary = "Only Admin with Root or Admin Role can execute this endpoint",
@@ -201,10 +196,30 @@ public class UserController {
         );
     }
 
+    /**
+     * {@link UserService#findByUsername(String)}
+     * @param username
+     * Admin can view any user in his company
+     * Root User can only search users with admin roles
+     */
+    @Operation(
+            description = "Get endpoint for deleting user",
+            summary = "Only Admin with Root or Admin Role can execute this endpoint",
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
+            }
+    )
     @PreAuthorize("hasAnyRole('Admin', 'Root')")
-    @GetMapping
-    public ResponseEntity<List<UserDto>> get() {
-        return ResponseEntity.ok(userService.listAllUsersByCompany("Blue Tech"));
+    @GetMapping("/{username}")
+    public ResponseEntity<ResponseWrapper> getUser(@PathVariable String username) {
+        return ResponseEntity.ok(
+                ResponseWrapper.builder()
+                        .message("User retrieved successfully")
+                        .success(true)
+                        .data(userService.findByUsername(username))
+                        .build()
+        );
     }
 
 

@@ -6,8 +6,8 @@ import com.cydeo.exception.UserNotFoundException;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.UserRepository;
 import com.cydeo.service.KeycloakService;
+import com.cydeo.service.SecurityService;
 import com.cydeo.service.UserService;
-import org.hibernate.query.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,29 +27,37 @@ public class UserServiceImpl implements UserService {
     private final MapperUtil mapper;
     private final PasswordEncoder passwordEncoder;
     private final KeycloakService keycloakService;
+    private final SecurityService securityService;
 
 
     public UserServiceImpl(UserRepository userRepository,
                            MapperUtil mapper,
                            PasswordEncoder passwordEncoder,
-                           KeycloakService keycloakService) {
+                           KeycloakService keycloakService, SecurityService securityService) {
         this.userRepository = userRepository;
         this.mapper = mapper;
         this.passwordEncoder = passwordEncoder;
         this.keycloakService = keycloakService;
+        this.securityService = securityService;
     }
 
+    private User getLoggedInUser() {
+        return securityService.getLoggedInUser();
+    }
     @Override
     public UserDto findByUsername(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        if (getLoggedInUser().getRole().getDescription().equalsIgnoreCase("Root User")){
+            if (user.getRole().getDescription().equalsIgnoreCase("Admin")){
+                return mapper.convert(user, new UserDto());
+            }
+            throw new UserNotFoundException("No admin found with username: "+ username);
+        }
         return mapper.convert(user, new UserDto());
     }
 
-    @Override
-    public User getLoggedInUser() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
-    }
+
+
 
     @Override
     public UserDto save(UserDto userDto) {
@@ -117,6 +124,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> listAllFilteredUsers(int pageNo, int pageSize) {
+
         String loggedInUserRole = getLoggedInUser().getRole().getDescription();
         if (loggedInUserRole.equalsIgnoreCase("Root User")) {
             return listAllAdmins(pageNo, pageSize);
@@ -156,6 +164,7 @@ public class UserServiceImpl implements UserService {
                 case "enabled" -> user.setEnabled((boolean) value);
             }
         }
+        userRepository.save(user);
         return mapper.convert(user, new UserDto());
     }
 
