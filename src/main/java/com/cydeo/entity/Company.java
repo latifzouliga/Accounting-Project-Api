@@ -6,14 +6,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "companies")
-@Where(clause = "is_deleted=false")
+@SQLRestriction(value = "is_deleted=false")
 public class Company extends BaseEntity {
 
     @Column(unique = true)
@@ -25,5 +25,5 @@ public class Company extends BaseEntity {
     private CompanyStatus companyStatus;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Address address;//  one-to-one / will be seen under "address_id" column on the "companies" table
+    private Address address;
 }

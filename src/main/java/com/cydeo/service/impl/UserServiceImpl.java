@@ -185,15 +185,18 @@ public class UserServiceImpl implements UserService {
 
         if (!isAdmin) {
             user.setIsDeleted(true);
+            user.setEnabled(false);
         }
         if (!isRootUser) {
             user.setIsDeleted(true);
+            user.setEnabled(false);
         } else {
             userList.forEach(each -> {
                 if (each.isOnlyAdmin()) {
                     throw new RuntimeException(username + " is only admin");
                 }
                 user.setIsDeleted(true);
+                user.setEnabled(false);
             });
         }
         userRepository.save(user);

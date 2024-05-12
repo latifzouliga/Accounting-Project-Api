@@ -6,13 +6,12 @@ import com.cydeo.enums.ClientVendorType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
-
+import org.hibernate.annotations.SQLRestriction;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "clients_vendors")
-@Where(clause = "is_deleted=false")
+@SQLRestriction(value = "is_deleted=false")
 public class ClientVendor extends BaseEntity {
     private String clientVendorName;
     private String phone;
@@ -20,7 +19,7 @@ public class ClientVendor extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ClientVendorType clientVendorType;
     @ManyToOne
-    private Address address; // one-to-one / will be seen under "address_id" column on the "clients_vendors" table
+    private Address address;
     @ManyToOne
-    private Company company; // many-to-one / will be seen under "company_id" column on the "clients_vendors" table
+    private Company company;
 }

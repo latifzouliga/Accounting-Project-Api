@@ -6,7 +6,7 @@ import com.cydeo.enums.InvoiceType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,12 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "invoices")
-@Where(clause = "is_deleted=false")
+@SQLRestriction(value = "is_deleted=false")
 public class Invoice extends BaseEntity {
     private String invoiceNo;
 
     @Enumerated(EnumType.STRING)
-    private InvoiceStatus invoiceStatus ;
+    private InvoiceStatus invoiceStatus;
 
     @Enumerated(EnumType.STRING)
     private InvoiceType invoiceType;
@@ -28,11 +28,9 @@ public class Invoice extends BaseEntity {
     private LocalDate date;
 
     @ManyToOne
-    private ClientVendor clientVendor     ;  // many-to-one / will be seen under "client_vendor_id" column on the "invoices" table
+    private ClientVendor clientVendor;
 
     @ManyToOne
-    private Company company               ;   // many-to-one / will be seen under "company_id" column on the "invoices" table
+    private Company company;
 
-//    @OneToMany(mappedBy = "invoice")
-//    private List<InvoiceProduct> invoiceProducts;
 }

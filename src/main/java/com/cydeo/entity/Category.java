@@ -6,13 +6,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "categories")
-@Where(clause = "is_deleted=false")
+@SQLRestriction(value = "is_deleted=false")
 public class Category extends BaseEntity {
     private String description;
     @ManyToOne

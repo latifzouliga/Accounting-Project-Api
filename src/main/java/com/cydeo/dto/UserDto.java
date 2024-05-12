@@ -39,6 +39,7 @@ public class UserDto {
     private String phone;
 
     private boolean enabled;
+
     @Schema(description = "Role ID", implementation = RoleIdOnly.class)
     private RoleDto role;
 

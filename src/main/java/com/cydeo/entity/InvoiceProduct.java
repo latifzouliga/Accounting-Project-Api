@@ -7,7 +7,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.math.BigDecimal;
 
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Table(name = "invoice_products")
-@Where(clause = "is_deleted=false")
+@SQLRestriction(value = "is_deleted=false")
 public class InvoiceProduct extends BaseEntity {
     private int quantity;
     private BigDecimal price;
@@ -23,7 +23,7 @@ public class InvoiceProduct extends BaseEntity {
     private BigDecimal profitLoss;
     private int remainingQuantity;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Invoice invoice;    // many-to-one / will be seen under "invoice_id" column on the "invoice_products" table
+    private Invoice invoice;
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
 }
