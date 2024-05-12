@@ -35,7 +35,7 @@ public class UserDto {
     private String lastname;
 
     @NotBlank(message = "Phone Number is required field.")
-    @Pattern(regexp = "^\\+?\\d{1,3}\\s?\\(?\\d{3}\\)?\\s?\\d{3}-\\d{4}$\n")
+//    @Pattern(regexp = "^\\+?\\d{1,3}\\s?\\(?\\d{3}\\)?\\s?\\d{3}-\\d{4}$\n")
     private String phone;
 
     private boolean enabled;

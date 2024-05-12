@@ -37,7 +37,7 @@ public class User extends BaseEntity {
     private String phone;
     private boolean enabled;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;  // many-to-one / will be seen under "role_id" column on the "users" table
 

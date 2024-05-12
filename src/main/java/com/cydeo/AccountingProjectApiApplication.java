@@ -50,11 +50,6 @@ public class AccountingProjectApiApplication {
 
 //            keycloakService.deleteAllOrphanedUsers(); //delete orphaned users in keycloak database
 
-            String admin = "admin@bluetech.com";
-            String root = "root@cydeo.com";
-            String password = "Abc1";
-
-
             System.out.println("\n\n\n=====================================================\n\t\tAdmin Token:\n");
 //            System.out.println(getToken(admin, password));
             System.out.println("\n=====================================================\n\t\tRoot Token");

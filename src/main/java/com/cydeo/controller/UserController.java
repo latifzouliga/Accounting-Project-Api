@@ -195,13 +195,15 @@ public class UserController {
     @DeleteMapping("/delete/{username}")
     public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable String username) {
         userService.delete(username);
-        return ResponseEntity.ok(
-                ResponseWrapper.builder()
-                        .success(true)
-                        .code(HttpStatus.NO_CONTENT.value())
-                        .message("User " + username + " deleted successfully")
-                        .build()
-        );
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(
+                        ResponseWrapper.builder()
+                                .success(true)
+                                .code(HttpStatus.NO_CONTENT.value())
+                                .message("User " + username + " deleted successfully")
+                                .build()
+                );
     }
 
     /**
