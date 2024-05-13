@@ -34,6 +34,11 @@ values ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
         'Blue Tech','+1 (215) 654-5268', 'https://www.bluetech.com', 3, 'ACTIVE'),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
         'Red Tech','+1 (215) 846-2642', 'https://www.redtech.com', 4, 'PASSIVE');
+-- -- ////////////////////////////////
+-- ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
+--     'Zouliga Tech','+1 (215) 111-2642', 'https://www.zouliga.com', 5, 'PASSIVE'),
+-- ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
+--     'Latif Tech','+1 (215) 222-2642', 'https://www.latif.com', 6, 'PASSIVE');
 
 insert into users(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                   username, password, firstname, lastname, phone, role_id, company_id, enabled)

@@ -26,7 +26,7 @@ import java.util.Map;
 
 @RestController
 @SecurityRequirement(name = "bearerAuth")
-@Tag(name = "Users", description = "Published memes related resources")
+@Tag(name = "Users", description = "Endpoints for managing and accessing user-related resources")
 @RequestMapping(
         value = "/users",
         produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
@@ -41,18 +41,12 @@ public class UserController {
     }
 
 
-    /**
-     * Create User: {@link UserService#save(UserDto)}
-     *
-     * @param userDto
-     */
     @Operation(
-            description = "Post endpoint for creating user",
-            summary = "Only User with Root or Admin Role can execute this endpoint",
+            description = "Save user",
+            summary = "Access all user resources (Root and Admin users only)",
             responses = {
-                    @ApiResponse(responseCode = "200",
-                            description = "Retrieve the badge.svg thanks to the redirect"),
-                    @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
+                    @ApiResponse(responseCode = "201", description = "User saved successfully"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
     @PreAuthorize("hasAnyRole('Admin', 'Root')")
@@ -65,7 +59,7 @@ public class UserController {
                 .body(ResponseWrapper.builder()
                         .code(HttpStatus.CREATED.value())
                         .success(true)
-                        .message("User created successfully")
+                        .message(String.format("User %s created successfully", user.getUsername()))
                         .data(user)
                         .build()
                 );
@@ -78,18 +72,18 @@ public class UserController {
      * List All Filtered User: {@link UserService#listAllFilteredUsers(int, int)
      */
     @Operation(
-            description = "Get endpoint for listing users",
-            summary = "Only Root and Admin with Root or Admin Roles can execute this endpoint",
+            description = "Retrieve all users",
+            summary = "Access all user resources (Root and Admin users only)",
             responses = {
-                    @ApiResponse(description = "Success", responseCode = "200"),
-                    @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
+                    @ApiResponse(responseCode = "200", description = "Successfully retrieved users data"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
     @PreAuthorize("hasAnyRole('Root','Admin')")
     @GetMapping(value = "/list", produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseWrapper> getAllFilteredUsers(
-            @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
 
         List<UserDto> userList = userService.listAllFilteredUsers(pageNo, pageSize);
         return ResponseEntity.ok(
@@ -109,11 +103,11 @@ public class UserController {
      * @param userDto
      */
     @Operation(
-            description = "Put endpoint for updating user",
-            summary = "Only Root and Admin with Root or Admin Roles can execute this endpoint",
+            description = "Update user",
+            summary = "Access all user resources (Root and Admin users only)",
             responses = {
-                    @ApiResponse(description = "Success", responseCode = "200"),
-                    @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
+                    @ApiResponse(responseCode = "201", description = "User updated successfully"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
     @PreAuthorize("hasAnyRole('Root','Admin')")
@@ -124,7 +118,7 @@ public class UserController {
                 ResponseWrapper.builder()
                         .code(HttpStatus.OK.value())
                         .success(true)
-                        .message("Users updated successfully")
+                        .message(String.format("User %s updated successfully", user.getUsername()))
                         .data(user)
                         .build()
         );
@@ -138,24 +132,21 @@ public class UserController {
      * @param field
      */
     @Operation(
-            description = "Put endpoint for updating user",
-            summary = "Only Root and Admin with Root or Admin Roles can execute this endpoint",
+            description = "Update user details",
+            summary = "Update user information (Root or Admin with Root/Admin Roles only)",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = """
-                            Please enter the field needs to be updated as key and value
-                            </br></br></br>
-                            Example: <strong>{"firstname":"name"}</strong>
-                            """,
+                    description = "Please provide the fields to update as key-value pairs.",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = UserDto.class)
                     )
             ),
             responses = {
-                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "User details updated successfully", responseCode = "200"),
                     @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
             }
     )
+
     @PreAuthorize("hasAnyRole('Root','Admin')")
     @PatchMapping("/update/{username}")
     public ResponseEntity<ResponseWrapper> patchUser(@Valid @PathVariable String username,
@@ -166,7 +157,7 @@ public class UserController {
                 ResponseWrapper.builder()
                         .code(HttpStatus.OK.value())
                         .success(true)
-                        .message("Users updated successfully")
+                        .message(String.format("User %s updated successfully", user.getUsername()))
                         .data(user)
                         .build()
         );
@@ -184,10 +175,10 @@ public class UserController {
      * @return userDto
      */
     @Operation(
-            description = "Delete endpoint for deleting user",
-            summary = "Only Admin with Root or Admin Role can execute this endpoint",
+            description = "Delete user",
+            summary = "Delete a user account (Admin with Root/Admin Roles only)",
             responses = {
-                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "User deleted successfully", responseCode = "200"),
                     @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
             }
     )
@@ -201,7 +192,7 @@ public class UserController {
                         ResponseWrapper.builder()
                                 .success(true)
                                 .code(HttpStatus.NO_CONTENT.value())
-                                .message("User " + username + " deleted successfully")
+                                .message(String.format("User %s updated successfully", username))
                                 .build()
                 );
     }
@@ -213,10 +204,10 @@ public class UserController {
      *                 Root User can only search users with admin roles
      */
     @Operation(
-            description = "Get endpoint for deleting user",
-            summary = "Only Admin with Root or Admin Role can execute this endpoint",
+            description = "Retrieve user details",
+            summary = "Retrieve user information (Admin with Root/Admin Roles only)",
             responses = {
-                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "User details retrieved successfully", responseCode = "200"),
                     @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
             }
     )
@@ -225,7 +216,7 @@ public class UserController {
     public ResponseEntity<ResponseWrapper> getUser(@PathVariable String username) {
         return ResponseEntity.ok(
                 ResponseWrapper.builder()
-                        .message("User retrieved successfully")
+                        .message(String.format("User %s retrieved successfully", username))
                         .success(true)
                         .data(userService.findByUsername(username))
                         .build()

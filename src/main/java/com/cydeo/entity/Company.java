@@ -3,12 +3,14 @@ package com.cydeo.entity;
 import com.cydeo.entity.common.BaseEntity;
 import com.cydeo.enums.CompanyStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
+import org.springframework.data.jpa.repository.Query;
 
-@Data
+
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -17,7 +19,7 @@ import org.hibernate.annotations.SQLRestriction;
 public class Company extends BaseEntity {
 
     @Column(unique = true)
-    private String title;   //  must be unique
+    private String title;
     private String phone;
     private String website;
 

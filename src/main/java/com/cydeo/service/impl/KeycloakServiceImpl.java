@@ -102,7 +102,6 @@ public class KeycloakServiceImpl implements KeycloakService {
         keycloakUser.setCredentials(List.of(credential));
         keycloakUser.setEmailVerified(true);
         keycloakUser.setEnabled(true);
-
         return keycloakUser;
     }
 
@@ -117,7 +116,6 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
 
-
     /*
         when we create a user from this application, it will create a user in the application database and in keycloak
         database, but when the application goes off the users in application database will be deleted automatically
@@ -127,14 +125,14 @@ public class KeycloakServiceImpl implements KeycloakService {
         the application start up
      */
     @Override
-    public void deleteAllOrphanedUsers(){
+    public void deleteAllOrphanedUsers() {
 
         List<String> userList = userRepository.findAll().stream().map(User::getUsername).toList();
         RealmResource realmResource = getKeycloakInstance().realm(keycloakProperties.getRealm());
         List<UserRepresentation> keycloakUsers = realmResource.users().list();
 
         for (UserRepresentation each : keycloakUsers) {
-            if (!userList.contains(each.getUsername())){
+            if (!userList.contains(each.getUsername())) {
                 delete(each.getUsername());
             }
         }
