@@ -22,7 +22,7 @@ import java.util.Objects;
 import static com.cydeo.controller.Utility.getToken;
 
 @SpringBootApplication
-@EnableJpaAuditing
+//@EnableJpaAuditing
 public class AccountingProjectApiApplication {
 
     private final KeycloakService keycloakService;

@@ -23,8 +23,6 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public AddressDto save(AddressDto addressDto) {
         Address address = mapperUtil.convert(addressDto, new Address());
-        address.setInsertUserId(getLoggedInUser().getId());
-        address.setLastUpdateUserId(getLoggedInUser().getId());
 
         addressRepository.save(address);
         return addressDto;

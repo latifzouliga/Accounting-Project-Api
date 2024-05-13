@@ -2,6 +2,7 @@ package com.cydeo.controller;
 
 import com.cydeo.dto.CompanyDto;
 import com.cydeo.entity.ResponseWrapper;
+import com.cydeo.enums.CompanyStatus;
 import com.cydeo.service.CompanyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -65,7 +66,7 @@ public class CompanyController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
-//    @PreAuthorize("hasRole('Root')")
+//    @PreAuthorize("hasRole('Root')") TODO: company title can have space. change company title to company id
     @GetMapping("/list/{companyTitle}")
     public ResponseEntity<ResponseWrapper> getCompanyByCompanyTitle(@PathVariable String companyTitle) {
         return ResponseEntity.ok(
@@ -82,25 +83,64 @@ public class CompanyController {
             description = "Create company",
             summary = "Create company (Root user only)",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Created company successfully"),
+                    @ApiResponse(responseCode = "201", description = "Company created successfully"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
 //    @PreAuthorize("hasRole('Root')")
     @PostMapping("/create")
-    public ResponseEntity<ResponseWrapper> createCompany( @RequestBody CompanyDto companyDto) {
-        return ResponseEntity.ok(
-                ResponseWrapper.builder()
+    public ResponseEntity<ResponseWrapper> createCompany(@RequestBody CompanyDto companyDto) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ResponseWrapper.builder()
                         .code(HttpStatus.OK.value())
                         .success(true)
                         .message(String.format("Successfully created %s company data", companyDto.getTitle()))
                         .data(companyService.create(companyDto))
                         .build()
+                );
+    }
+
+    @Operation(
+            description = "update company",
+            summary = "Create company (Root user only)",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Company updated successfully"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
+            }
+    )
+    @PostMapping("/update")
+    public ResponseEntity<ResponseWrapper> updateCompany(@RequestBody CompanyDto companyDto) {
+        return ResponseEntity.ok(
+                ResponseWrapper.builder()
+                        .code(HttpStatus.OK.value())
+                        .success(true)
+                        .message(String.format("Successfully updated %s company data", companyDto.getTitle()))
+                        .data(companyService.update(companyDto))
+                        .build()
         );
     }
 
-
-
+    @Operation(
+            description = "update company status",
+            summary = "update company status (Root user only)",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Company status updated successfully"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
+            }
+    )
+    @PutMapping("/update-status/{companyId}/{companyStatus}")
+    public ResponseEntity<ResponseWrapper> activateCompany(@PathVariable Long companyId,
+                                                           @PathVariable String companyStatus) {
+        return ResponseEntity.ok(
+                ResponseWrapper.builder()
+                        .code(HttpStatus.OK.value())
+                        .success(true)
+                        .message(String.format("Successfully updated company %s to %s", companyId, companyStatus))
+                        .data(companyService.activateDeactivate(companyId, companyStatus))
+                        .build()
+        );
+    }
 
 
 }

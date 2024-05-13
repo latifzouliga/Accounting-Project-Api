@@ -15,29 +15,31 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @MappedSuperclass
-@EntityListeners({AuditingEntityListener.class, BaseEntityListener.class})
+@EntityListeners({
+        BaseEntityListener.class
+})
 public class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CreatedDate
+//    @CreatedDate
     @Column(nullable = false, updatable = false)
     public LocalDateTime insertDateTime;
 
-    @LastModifiedDate
+//    @LastModifiedDate
     @Column(nullable = false)
     public LocalDateTime lastUpdateDateTime;
 
 
     //    @CreatedBy
     @Column(nullable = false)
-    public Long insertUserId;
+    public String insertUserId;
 
     //    @LastModifiedDate
     @Column(nullable = false, updatable = false)
-    public Long lastUpdateUserId;
+    public String lastUpdateUserId;
 
     private Boolean isDeleted = false;
 

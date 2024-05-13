@@ -8,33 +8,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
-public class BaseEntityListener extends AuditingEntityListener {
-
-    private static SecurityService securityService;
-
-    @Autowired
-    public void init(SecurityService securityService) {
-        BaseEntityListener.securityService = securityService;
-    }
+public class BaseEntityListener {
 
     @PrePersist
     public void onPrePersist(BaseEntity baseEntity) {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !authentication.getName().equals("anonymousUser")) {
-            baseEntity.insertUserId = securityService.getLoggedInUser().getId();
-            baseEntity.lastUpdateUserId = securityService.getLoggedInUser().getId();
-        }
+        metadata(baseEntity);
     }
 
     @PreUpdate
     public void onPreUpdate(BaseEntity baseEntity) {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !authentication.getName().equals("anonymousUser")) {
-            baseEntity.lastUpdateUserId = securityService.getLoggedInUser().getId();
+        metadata(baseEntity);
+    }
+
+    private static void metadata(BaseEntity baseEntity) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        baseEntity.insertDateTime = LocalDateTime.now();
+        baseEntity.lastUpdateDateTime = LocalDateTime.now();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Jwt jwt = (Jwt) authentication.getCredentials();
+            String userId = jwt.getClaimAsString("sub");
+            baseEntity.insertUserId = userId;
+            baseEntity.lastUpdateUserId = userId;
         }
     }
+
+
 
 }

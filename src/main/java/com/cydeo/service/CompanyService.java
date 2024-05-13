@@ -15,4 +15,8 @@ public interface CompanyService {
     CompanyDto findCompanyByCompanyTitle(String companyTitle);
 
     CompanyDto create(CompanyDto companyDto);
+
+    CompanyDto update(CompanyDto companyDto);
+
+    CompanyDto activateDeactivate(Long companyId, String status);
 }

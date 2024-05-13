@@ -2,7 +2,7 @@ package com.cydeo.service.impl;
 
 import com.cydeo.dto.UserDto;
 import com.cydeo.entity.User;
-import com.cydeo.exception.ServiceException;
+import com.cydeo.exception.ResourceNotFoundException;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.UserRepository;
 import com.cydeo.service.KeycloakService;
@@ -16,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -49,12 +48,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findByUsername(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new ServiceException(username));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException(username));
         if (getLoggedInUser().getRole().getDescription().equalsIgnoreCase("Root User")) {
             if (user.getRole().getDescription().equalsIgnoreCase("Admin")) {
                 return mapper.convert(user, new UserDto());
             }
-            throw new ServiceException("No admin found with username: " + username);
+            throw new ResourceNotFoundException("No admin found with username: " + username);
         }
         return mapper.convert(user, new UserDto());
     }
@@ -136,15 +135,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto update(UserDto userDto) {
         User user = userRepository.findByUsername(userDto.getUsername())
-                .orElseThrow(() -> new ServiceException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         userDto.setId(user.getId());
         User updatedUser = mapper.convert(userDto, new User());
         updatedUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
-//        updatedUser.setInsertDateTime(LocalDateTime.now());
-//        updatedUser.setLastUpdateDateTime(LocalDateTime.now());
-//        updatedUser.setLastUpdateUserId(getLoggedInUser().getId());
-//        updatedUser.setInsertUserId(getLoggedInUser().getId());
         userRepository.save(updatedUser);
         return userDto;
     }
@@ -152,7 +147,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto update(String username, Map<String, Object> fieldToBeUpdated) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ServiceException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         for (Map.Entry<String, Object> entry : fieldToBeUpdated.entrySet()) {
             String field = entry.getKey();
@@ -175,7 +170,7 @@ public class UserServiceImpl implements UserService {
 
         User loggedInUser = getLoggedInUser();
         List<UserDto> userList = listAllUsersByCompany(getCompanyTitle());
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new ServiceException("User not found"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         boolean isAdmin = user.getRole().getDescription().equalsIgnoreCase("Admin");
         boolean isRootUser = user.getRole().getDescription().equalsIgnoreCase("Root User");
