@@ -31,6 +31,7 @@ import java.util.Map;
         value = "/users",
         produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
 )
+@PreAuthorize("hasAnyRole('Admin', 'Root')")
 public class UserController {
 
     private final UserService userService;
@@ -49,7 +50,7 @@ public class UserController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
-    @PreAuthorize("hasAnyRole('Admin', 'Root')")
+    @PreAuthorize("hasAnyAuthority('Admin', 'Root')")
     @PostMapping("/create")
     public ResponseEntity<ResponseWrapper> create(@Valid @RequestBody UserDto userDto) {
         UserDto user = userService.save(userDto);
@@ -79,7 +80,7 @@ public class UserController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
-    @PreAuthorize("hasAnyRole('Root','Admin')")
+    @PreAuthorize("hasAnyAuthority('Root','Admin')")
     @GetMapping(value = "/list", produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseWrapper> getAllFilteredUsers(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
@@ -110,7 +111,7 @@ public class UserController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
-    @PreAuthorize("hasAnyRole('Root','Admin')")
+    @PreAuthorize("hasAnyAuthority('Root','Admin')")
     @PutMapping("/update")
     public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDto userDto) {
         UserDto user = userService.update(userDto);
@@ -147,7 +148,7 @@ public class UserController {
             }
     )
 
-    @PreAuthorize("hasAnyRole('Root','Admin')")
+    @PreAuthorize("hasAnyAuthority('Root','Admin')")
     @PatchMapping("/update/{username}")
     public ResponseEntity<ResponseWrapper> patchUser(@Valid @PathVariable String username,
                                                      @RequestBody() Map<String, Object> field) {
@@ -182,7 +183,7 @@ public class UserController {
                     @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
             }
     )
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasAuthority('Admin')")
     @DeleteMapping("/delete/{username}")
     public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable String username) {
         userService.delete(username);
@@ -211,7 +212,7 @@ public class UserController {
                     @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
             }
     )
-    @PreAuthorize("hasAnyRole('Admin', 'Root')")
+    @PreAuthorize("hasAnyAuthority('Admin', 'Root')")
     @GetMapping("/{username}")
     public ResponseEntity<ResponseWrapper> getUser(@PathVariable String username) {
         return ResponseEntity.ok(

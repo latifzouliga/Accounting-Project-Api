@@ -52,6 +52,28 @@ public class SecurityConfig {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
-
-
 }
+
+//                .antMatchers("/companies/list").hasAuthority("Root")
+//                .antMatchers("/companies/create").hasAuthority("Root")
+//                .antMatchers("/users/list").hasAuthority("Root")
+//                .antMatchers("/users/list").hasAuthority("Admin")
+//                .antMatchers("/users/create").hasAuthority("Root")
+//                .antMatchers("/users/create").hasAuthority("Admin")
+//                .antMatchers("/clientVendors/list").hasAuthority("Admin")
+//                .antMatchers("/clientVendors/create").hasAuthority("Admin")
+//                .antMatchers("/categories/list").hasAuthority("Admin")
+//                .antMatchers("/categories/create").hasAuthority("Admin")
+//                .antMatchers("/products/list").hasAuthority("Admin")
+//                .antMatchers("/products/create").hasAuthority("Admin")
+//                .antMatchers("/purchaseInvoices/list").hasAuthority("Admin")
+//                .antMatchers("/purchaseInvoices/print/1").hasAuthority("Admin")
+//                .antMatchers("/purchaseInvoices/create").hasAuthority("Admin")
+//                .antMatchers("/salesInvoices/list").hasAuthority("Admin")
+//                .antMatchers("/salesInvoices/create").hasAuthority("Admin")
+//                .antMatchers("/reports/profitLossData").hasAuthority("Admin")
+//                .antMatchers("/reports/stockData").hasAuthority("Admin")
+//                .antMatchers("/dashboard").hasAuthority("Manager")
+//                .antMatchers("/dashboard").hasAuthority("Employee")
+//                .antMatchers("/purchaseInvoices/list").hasAuthority("Manager")
+//                .antMatchers("/salesInvoices/list").hasAuthority("Manager")

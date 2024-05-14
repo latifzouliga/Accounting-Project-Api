@@ -40,7 +40,6 @@ public class CompanyController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
-//    @PreAuthorize("hasRole('Root')")
     @GetMapping("/list")
     public ResponseEntity<ResponseWrapper> listCompanies(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
@@ -59,22 +58,21 @@ public class CompanyController {
 
 
     @Operation(
-            description = "Retrieve company by company title",
+            description = "Retrieve company by id",
             summary = "Access one company resources (Root user only)",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successfully retrieved company data"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
-//    @PreAuthorize("hasRole('Root')") TODO: company title can have space. change company title to company id
-    @GetMapping("/list/{companyTitle}")
-    public ResponseEntity<ResponseWrapper> getCompanyByCompanyTitle(@PathVariable String companyTitle) {
+    @GetMapping("/list/{id}")
+    public ResponseEntity<ResponseWrapper> getCompanyById(@PathVariable Long id) {
         return ResponseEntity.ok(
                 ResponseWrapper.builder()
                         .code(HttpStatus.OK.value())
                         .success(true)
-                        .message(String.format("Successfully retrieved %s company data", companyTitle))
-                        .data(companyService.findCompanyByCompanyTitle(companyTitle))
+                        .message(String.format("Successfully retrieved company with %s data", id))
+                        .data(companyService.findCompanyById(id))
                         .build()
         );
     }
@@ -87,7 +85,6 @@ public class CompanyController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
-//    @PreAuthorize("hasRole('Root')")
     @PostMapping("/create")
     public ResponseEntity<ResponseWrapper> createCompany(@RequestBody CompanyDto companyDto) {
         return ResponseEntity

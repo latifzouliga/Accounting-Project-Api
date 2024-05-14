@@ -87,6 +87,13 @@ public class CompanyServiceImpl implements CompanyService {
         return mapperUtil.convert(company, new CompanyDto());
     }
 
+    @Override
+    public CompanyDto findCompanyById(Long id) {
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
+        return mapperUtil.convert(company, new CompanyDto());
+    }
+
     private User getLoggeDIndUser() {
         return securityService.getLoggedInUser();
     }
