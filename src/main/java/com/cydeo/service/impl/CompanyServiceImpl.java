@@ -66,21 +66,21 @@ public class CompanyServiceImpl implements CompanyService {
 
         Long existingAddressId = existingCompany.getAddress().getId();
 
-        updatedCompany.setId(existingCompany.getId());
         updatedCompany.getAddress().setId(existingAddressId);
+        updatedCompany.setId(existingCompany.getId());
         companyRepository.save(mapperUtil.convert(updatedCompany, new Company()));
         return updatedCompany;
     }
 
     @Override
-    public CompanyDto activateDeactivate(Long companyId, String status) {
+    public CompanyDto activateDeactivate(Long companyId, String companyStatus) {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(companyId)));
 
-        switch (status) {
+        switch (companyStatus) {
             case "active" -> company.setCompanyStatus(CompanyStatus.ACTIVE);
             case "passive" -> company.setCompanyStatus(CompanyStatus.PASSIVE);
-            default -> throw new ServiceException("Wrong company status. Please use Active/Passive: " + status);
+            default -> throw new ServiceException("Wrong company companyStatus. Please use Active/Passive: " + companyStatus);
         }
 
         companyRepository.save(company);

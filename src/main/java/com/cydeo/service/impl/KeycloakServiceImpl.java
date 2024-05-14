@@ -17,7 +17,10 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.keycloak.admin.client.CreatedResponseUtil.getCreatedId;
 
@@ -102,6 +105,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         keycloakUser.setCredentials(List.of(credential));
         keycloakUser.setEmailVerified(true);
         keycloakUser.setEnabled(true);
+
         return keycloakUser;
     }
 
@@ -137,6 +141,8 @@ public class KeycloakServiceImpl implements KeycloakService {
             }
         }
     }
+
+
 
 
 }
