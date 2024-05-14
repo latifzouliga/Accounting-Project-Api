@@ -4,9 +4,11 @@ package com.cydeo.entity;
 import com.cydeo.entity.common.BaseEntity;
 import com.cydeo.enums.ClientVendorType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
