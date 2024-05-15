@@ -1,6 +1,7 @@
 package com.cydeo.service.impl;
 
 import com.cydeo.dto.ClientVendorDto;
+import com.cydeo.dto.CompanyDto;
 import com.cydeo.entity.ClientVendor;
 import com.cydeo.entity.User;
 import com.cydeo.enums.ClientVendorType;
@@ -32,7 +33,8 @@ public class ClientVendorServiceImp implements ClientVendorService {
         PageRequest pageRequest = PageRequest.of(pageNo, pageSize, sort);
 
         String companyTitle = securityService.getLoggedInUser().getCompany().getTitle();
-        return clientVendorRepository.findAllByCompany_Title(companyTitle, pageRequest).stream()
+        return clientVendorRepository.findAllByCompany_Title(companyTitle, pageRequest)
+                .stream()
                 .map(clientVendor -> mapperUtil.convert(clientVendor, new ClientVendorDto()))
                 .collect(Collectors.toList());
     }
@@ -50,7 +52,11 @@ public class ClientVendorServiceImp implements ClientVendorService {
         };
 
         String companyTitle = securityService.getLoggedInUser().getCompany().getTitle();
-        return clientVendorRepository.findAllByCompany_TitleAndClientVendorType(companyTitle, clientVendor, pageRequest)
+        return clientVendorRepository.findAllByCompany_TitleAndClientVendorType(
+                        companyTitle,
+                        clientVendor,
+                        pageRequest
+                )
                 .stream()
                 .map(cv -> mapperUtil.convert(cv, new ClientVendorDto()))
                 .toList();
@@ -67,7 +73,17 @@ public class ClientVendorServiceImp implements ClientVendorService {
     // TODO: implement update client/vendor method
     @Override
     public ClientVendorDto update(Long clientVendorId, ClientVendorDto clientVendorDto) {
-        return null;
+
+        ClientVendor clientVendor = clientVendorRepository.findById(clientVendorId)
+                .orElseThrow(() -> new ServiceException(String.valueOf(clientVendorId)));
+
+        clientVendorDto.setId(clientVendor.getId());
+        clientVendorDto.getAddress().setId(clientVendor.getAddress().getId());
+        clientVendorDto.setCompany(mapperUtil.convert(clientVendor.getCompany(), new CompanyDto()));
+
+        ClientVendor updatedClientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
+        clientVendorRepository.save(updatedClientVendor);
+        return clientVendorDto;
     }
 
     private User getLoggedInUser() {

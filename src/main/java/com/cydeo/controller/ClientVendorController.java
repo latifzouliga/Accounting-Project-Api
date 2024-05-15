@@ -93,7 +93,9 @@ public class ClientVendorController {
     @PreAuthorize("hasRole('Admin')")
     @PostMapping("/create")
     public ResponseEntity<ResponseWrapper> createClientVendor(@RequestBody ClientVendorDto clientVendorDto) {
-        return ResponseEntity.ok(
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
                 ResponseWrapper.builder()
                         .success(true)
                         .message("Successfully created clientVendor")
