@@ -2,7 +2,6 @@ package com.cydeo.controller;
 
 import com.cydeo.dto.CompanyDto;
 import com.cydeo.entity.ResponseWrapper;
-import com.cydeo.enums.CompanyStatus;
 import com.cydeo.service.CompanyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -86,7 +85,7 @@ public class CompanyController {
             }
     )
     @PostMapping("/create")
-    public ResponseEntity<ResponseWrapper> createCompany(@RequestBody CompanyDto companyDto) {
+    public ResponseEntity<ResponseWrapper> createCompany(@Valid @RequestBody CompanyDto companyDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ResponseWrapper.builder()
@@ -107,7 +106,7 @@ public class CompanyController {
             }
     )
     @PostMapping("/update")
-    public ResponseEntity<ResponseWrapper> updateCompany(@RequestBody CompanyDto companyDto) {
+    public ResponseEntity<ResponseWrapper> updateCompany(@Valid @RequestBody CompanyDto companyDto) {
         return ResponseEntity.ok(
                 ResponseWrapper.builder()
                         .code(HttpStatus.OK.value())
