@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Tag(name = "Client Vendor", description = "Endpoints for managing and accessing client-vendor-related resources")
@@ -120,13 +121,34 @@ public class ClientVendorController {
         return ResponseEntity.ok(
                 ResponseWrapper.builder()
                         .success(true)
-                        .message("Successfully created clientVendor")
+                        .message("Successfully updated clientVendor")
                         .code(HttpStatus.OK.value())
                         .data(clientVendorService.update(id,clientVendorDto))
                         .build()
         );
     }
 
+
+    @Operation(
+            description = "Patch clientVendor",
+            summary = "Create clientVendor (Admin user only)",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successfully updated clientVendor"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
+            }
+    )
+    @PreAuthorize("hasRole('Admin')")
+    @PatchMapping("/patch/{id}")
+    public ResponseEntity<ResponseWrapper> patchClientVendor(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
+        return ResponseEntity.ok(
+                ResponseWrapper.builder()
+                        .success(true)
+                        .message("Successfully updated clientVendor field/s")
+                        .code(HttpStatus.OK.value())
+                        .data(clientVendorService.patch(id,fields))
+                        .build()
+        );
+    }
 
 }
 
