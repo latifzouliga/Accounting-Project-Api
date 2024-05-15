@@ -2,9 +2,7 @@ package com.cydeo.controller;
 
 import com.cydeo.dto.UserDto;
 import com.cydeo.entity.ResponseWrapper;
-import com.cydeo.service.KeycloakService;
 import com.cydeo.service.UserService;
-import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +27,6 @@ import java.util.Map;
         value = "/users",
         produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
 )
-@PreAuthorize("hasAnyRole('Admin', 'Root')")
 public class UserController {
 
     private final UserService userService;
@@ -50,10 +45,10 @@ public class UserController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
-    @PreAuthorize("hasAnyAuthority('Admin', 'Root')")
+    @PreAuthorize("hasAnyRole('Admin', 'Root')")
     @PostMapping("/create")
     public ResponseEntity<ResponseWrapper> create(@Valid @RequestBody UserDto userDto) {
-        UserDto user = userService.save(userDto);
+        UserDto user = userService.create(userDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -80,7 +75,7 @@ public class UserController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
-    @PreAuthorize("hasAnyAuthority('Root','Admin')")
+    @PreAuthorize("hasAnyRole('Root','Admin')")
     @GetMapping(value = "/list", produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseWrapper> getAllFilteredUsers(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
@@ -111,7 +106,7 @@ public class UserController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
-    @PreAuthorize("hasAnyAuthority('Root','Admin')")
+    @PreAuthorize("hasAnyRole('Root','Admin')")
     @PutMapping("/update")
     public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDto userDto) {
         UserDto user = userService.update(userDto);
@@ -148,7 +143,7 @@ public class UserController {
             }
     )
 
-    @PreAuthorize("hasAnyAuthority('Root','Admin')")
+    @PreAuthorize("hasAnyRole('Root','Admin')")
     @PatchMapping("/update/{username}")
     public ResponseEntity<ResponseWrapper> patchUser(@Valid @PathVariable String username,
                                                      @RequestBody() Map<String, Object> field) {
@@ -183,7 +178,7 @@ public class UserController {
                     @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
             }
     )
-    @PreAuthorize("hasAuthority('Admin')")
+    @PreAuthorize("hasRole('Admin')")
     @DeleteMapping("/delete/{username}")
     public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable String username) {
         userService.delete(username);
@@ -212,7 +207,7 @@ public class UserController {
                     @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
             }
     )
-    @PreAuthorize("hasAnyAuthority('Admin', 'Root')")
+    @PreAuthorize("hasAnyRole('Admin', 'Root')")
     @GetMapping("/{username}")
     public ResponseEntity<ResponseWrapper> getUser(@PathVariable String username) {
         return ResponseEntity.ok(

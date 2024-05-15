@@ -20,6 +20,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +43,8 @@ class UserServiceImplTest {
     private UserServiceImpl userService;
     @Spy
     private MapperUtil mapperUtil = new MapperUtil(new ModelMapper());
+    @Spy
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     /**
      * Test Find By Username: {@link UserServiceImpl#findByUsername(String)}
@@ -205,35 +209,99 @@ class UserServiceImplTest {
     @DisplayName("Update User: Accepts User Object As Parameter")
     @Test
     void update() {
+        String rawPassword = "Abc1";
+        String encodedPassword = "encodedAbc1"; // Use a fixed encoded password for stubbing
+
+        Company company = new Company();
+        company.setId(1L);
+        company.setTitle("any company");
+
+        Role role1 = new Role();
+        role1.setId(2L);
+        role1.setDescription("Admin");
 
         User user = new User();
-        UserDto userDto = UserDto.builder().build();
+        user.setId(1L);
+        user.setFirstname("mike");
+        user.setLastname("can");
+        user.setUsername("user1@email.com");
+        user.setRole(role1);
+        user.setCompany(company);
+        user.setPassword(encodedPassword);
 
+        UserDto userDto = UserDto.builder()
+                .id(1L)
+                .firstname("mike")
+                .lastname("can")
+                .username("user1@email.com")
+                .password("Abc1")
+                .role(RoleDto.builder().id(2L).description("Admin").build())
+                .company(CompanyDto.builder().id(1L).title("any company").build())
+                .build();
+
+        when(passwordEncoder.encode(rawPassword)).thenReturn(encodedPassword);
         when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
-        when(mapperUtil.convert(userDto, new User())).thenReturn(user);
+        doReturn(user).when(mapperUtil).convert(any(UserDto.class), any(User.class));
         when(userRepository.save(user)).thenReturn(user);
 
-        userService.update(userDto);
+        UserDto updatedUserDto = userService.update(userDto);
 
         verify(userRepository).findByUsername(user.getUsername());
         verify(userRepository).save(user);
+        verify(passwordEncoder).encode(rawPassword);
+
+        assertEquals(userDto, updatedUserDto);
+
 
     }
 
     @DisplayName("Update User: Accepts Map<String, Object> As Parameter")
     @Test
     void testUpdate() {
+
+        String rawPassword = "Abc1";
+        String encodedPassword = "encodedAbc1"; // Use a fixed encoded password for stubbing
+
+        Company company = new Company();
+        company.setId(1L);
+        company.setTitle("any company");
+
+        Role role1 = new Role();
+        role1.setId(2L);
+        role1.setDescription("Admin");
+
         User user = new User();
-        UserDto userDto = UserDto.builder().build();
+        user.setId(1L);
+        user.setFirstname("mike");
+        user.setLastname("can");
+        user.setUsername("user1@email.com");
+        user.setRole(role1);
+        user.setCompany(company);
+        user.setPassword(encodedPassword);
 
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
-        when(mapperUtil.convert(userDto, new User())).thenReturn(user);
-        when(userRepository.save(user)).thenReturn(user);
+        UserDto userDto = UserDto.builder()
+                .id(1L)
+                .firstname("mike")
+                .lastname("can")
+                .username("user1@email.com")
+                .password("Abc1")
+                .role(RoleDto.builder().id(2L).description("Admin").build())
+                .company(CompanyDto.builder().id(1L).title("any company").build())
+                .build();
 
-        userService.update(userDto);
+//        when(passwordEncoder.encode(rawPassword)).thenReturn(encodedPassword);
+//        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+//        doReturn(user).when(mapperUtil).convert(any(UserDto.class), any(User.class));
+//        when(userRepository.save(user)).thenReturn(user);
+//
+//        UserDto updatedUserDto = userService.update(userDto);
+//
+//        verify(userRepository).findByUsername(user.getUsername());
+//        verify(userRepository).save(user);
+//        verify(passwordEncoder).encode(rawPassword);
+//
+//        assertEquals(userDto, updatedUserDto);
 
-        verify(userRepository).findByUsername(user.getUsername());
-        verify(userRepository).save(user);
     }
 
     @DisplayName("Delete User")

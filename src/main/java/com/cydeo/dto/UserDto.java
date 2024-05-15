@@ -34,8 +34,14 @@ public class UserDto {
     @Size(min = 2, max = 50)
     private String lastname;
 
-    @NotBlank(message = "Phone Number is required field.")
-//    @Pattern(regexp = "^\\+?\\d{1,3}\\s?\\(?\\d{3}\\)?\\s?\\d{3}-\\d{4}$\n")
+
+//        @Pattern(regexp = "^\\+?\\d{1,3}\\s?\\(?\\d{3}\\)?\\s?\\d{3}-\\d{4}$\n",
+//                message = "Phone is required field and may be in any valid phone number format.")
+//    @Pattern(
+//            // +111 (202) 555-0125 // +1 (202) 555-0125   // +111 123 456 789
+//            regexp = " ^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$ |^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$ |^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$",
+//            message = "Phone is required field and may be in any valid phone number format."
+//    )
     private String phone;
 
     private boolean enabled;

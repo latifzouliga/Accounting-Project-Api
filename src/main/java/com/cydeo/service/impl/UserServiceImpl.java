@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
         return securityService.getLoggedInUser();
     }
 
+
     @Override
     public UserDto findByUsername(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException(username));
@@ -61,17 +62,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDto save(UserDto userDto) {
+    public UserDto create(UserDto userDto) {
         String password = userDto.getPassword();
         User user = mapper.convert(userDto, new User());
 
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setEnabled(true);
         user.setPassword(passwordEncoder.encode(password));
-//            user.setInsertDateTime(LocalDateTime.now());
-//            user.setLastUpdateDateTime(LocalDateTime.now());
-//            user.setLastUpdateUserId(getLoggedInUser().getId());
-//            user.setInsertUserId(getLoggedInUser().getId());
         userRepository.save(user);
         keycloakService.userCreate(userDto);
         return userDto;
@@ -131,7 +128,7 @@ public class UserServiceImpl implements UserService {
         return listAllUsersByCompany(getCompanyTitle());
     }
 
-    @Transactional
+
     @Override
     public UserDto update(UserDto userDto) {
         User user = userRepository.findByUsername(userDto.getUsername())
