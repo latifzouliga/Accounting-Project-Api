@@ -1,6 +1,7 @@
 package com.cydeo.entity;
 
 import com.cydeo.entity.common.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -17,6 +18,8 @@ import org.hibernate.annotations.SQLRestriction;
 @Table(name = "addresses")
 @SQLRestriction(value = "is_deleted=false")
 public class Address extends BaseEntity {
+    @JsonIgnore
+    private Long id;
     private String addressLine1;
     private String addressLine2;
     private String city;

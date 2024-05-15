@@ -1,6 +1,8 @@
 package com.cydeo.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -13,8 +15,11 @@ import lombok.*;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddressDto {
+
+    @Schema(hidden = true)
     private Long id;
 
+    @Schema(example = "123 main st")
     @NotBlank(message = "Address is a required field.")
     @Size(
             max = 100,
@@ -22,12 +27,14 @@ public class AddressDto {
     )
     private String addressLine1;
 
+    @Schema(example = "123 main st")
     @Size(
             max = 100,
             message = "Address should have maximum 100 characters long."
     )
     private String addressLine2;
 
+    @Schema(example = "Pittsburgh")
     @NotBlank(message = "City is a required field.")
     @Size(
             max = 50, min = 2,
@@ -35,6 +42,7 @@ public class AddressDto {
     )
     private String city;
 
+    @Schema(example = "Pa")
     @NotBlank(message = "State is a required field.")
     @Size(
             max = 50, min = 2,
@@ -42,6 +50,7 @@ public class AddressDto {
     )
     private String state;
 
+    @Schema(example = "USA")
     @NotBlank(message = "Country is a required field.")
     @Size(
             max = 50, min = 2,
@@ -49,6 +58,7 @@ public class AddressDto {
     )
     private String country;
 
+    @Schema(example = "15555")
     @NotBlank(message = "Zipcode is a required field.")
     @Pattern(
             regexp = "^\\d{5}([-]|\\s*)?(\\d{4})?$",

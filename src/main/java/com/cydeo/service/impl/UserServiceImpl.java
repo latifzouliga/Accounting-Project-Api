@@ -1,14 +1,18 @@
 package com.cydeo.service.impl;
 
+import com.cydeo.dto.RoleDto;
 import com.cydeo.dto.UserDto;
 import com.cydeo.entity.User;
 import com.cydeo.exception.ResourceNotFoundException;
 import com.cydeo.mapper.MapperUtil;
+import com.cydeo.repository.RoleRepository;
 import com.cydeo.repository.UserRepository;
 import com.cydeo.service.KeycloakService;
+import com.cydeo.service.RoleService;
 import com.cydeo.service.SecurityService;
 import com.cydeo.service.UserService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,26 +25,17 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
 
     private final UserRepository userRepository;
     private final MapperUtil mapper;
     private final PasswordEncoder passwordEncoder;
     private final KeycloakService keycloakService;
     private final SecurityService securityService;
+    private final RoleService roleService;
 
-
-    public UserServiceImpl(@Lazy UserRepository userRepository,
-                           MapperUtil mapper,
-                           PasswordEncoder passwordEncoder,
-                           KeycloakService keycloakService,
-                           @Lazy SecurityService securityService) {
-        this.userRepository = userRepository;
-        this.mapper = mapper;
-        this.passwordEncoder = passwordEncoder;
-        this.keycloakService = keycloakService;
-        this.securityService = securityService;
-    }
 
     private User getLoggedInUser() {
         return securityService.getLoggedInUser();
@@ -60,9 +55,10 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     public UserDto create(UserDto userDto) {
+        RoleDto roleDto = roleService.findById(userDto.getRole().getId());
+        userDto.setRole(roleDto);  // to make keycloak works properly
         String password = userDto.getPassword();
         User user = mapper.convert(userDto, new User());
 

@@ -2,6 +2,7 @@ package com.cydeo.dto;
 
 import com.cydeo.enums.CompanyStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,23 +20,22 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CompanyDto {
 
+    @Schema(hidden = true)
     private Long id;
 
+    @Schema(example = "Green tech")
     @NotBlank(message = "Title is a required field.")
     @Size(max = 100, min = 2, message = "Title should be 2-100 characters long.")
     private String title;
 
+    @Schema(example = "1-xxx-xxx-xxxx")
     @Pattern(
-            // +111 123 45 67 89  // +111 (202) 555-0125 // +1 (202) 555-0125   // +111 123 456 789
-            regexp =  """
-            ^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$
-            |^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$
-            |^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$
-            """,
-            message = "Phone number is required field and may be in any valid phone number format."
+            regexp = "^1-[0-9]{3}?-[0-9]{3}?-[0-9]{4}$",
+            message = "Phone is required field and may be in any valid phone number format."
     )
     private String phone;
 
+    @Schema(example = "www.example.com")
     @NotBlank(message = "Website is a required field.")
     @Pattern(
             regexp = "^http(s{0,1})://[a-zA-Z0-9/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9/\\&\\?\\=\\-\\.\\~\\%]*",

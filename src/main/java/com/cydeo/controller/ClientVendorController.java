@@ -31,8 +31,8 @@ public class ClientVendorController {
     private final ClientVendorService clientVendorService;
 
     @Operation(
-            description = "Retrieve all companies",
-            summary = "Access all company resources (Root user only)",
+            description = "Retrieve all clients/vendors",
+            summary = "Access all clients/vendors resources (Root user only)",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successfully retrieved clients-vendors data"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
@@ -40,8 +40,8 @@ public class ClientVendorController {
     )
     @GetMapping("/list")
     public ResponseEntity<ResponseWrapper> listAllClientsAndVendors(
-            @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize){
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
 
         List<ClientVendorDto> clientVendorList = clientVendorService.listAllClientVendors(pageNo, pageSize);
         return ResponseEntity.ok(
@@ -53,7 +53,6 @@ public class ClientVendorController {
                         .size(clientVendorList.size())
                         .build()
         );
-
     }
 
     @Operation(
@@ -67,10 +66,10 @@ public class ClientVendorController {
     @GetMapping("/list/{clientVendorType}")
     public ResponseEntity<ResponseWrapper> listAllClients(
             @PathVariable String clientVendorType,
-            @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize){
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
 
-        List<ClientVendorDto> clientVendorList = clientVendorService.listAllClientsClientVendorType(clientVendorType,pageNo, pageSize);
+        List<ClientVendorDto> clientVendorList = clientVendorService.listAllByClientVendorType(clientVendorType, pageNo, pageSize);
         return ResponseEntity.ok(
                 ResponseWrapper.builder()
                         .success(true)
@@ -80,8 +79,53 @@ public class ClientVendorController {
                         .size(clientVendorList.size())
                         .build()
         );
-
     }
+
+
+    @Operation(
+            description = "Create clientVendor",
+            summary = "Create clientVendor (Admin user only)",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successfully created clientVendor"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
+            }
+    )
+    @PreAuthorize("hasRole('Admin')")
+    @PostMapping("/create")
+    public ResponseEntity<ResponseWrapper> createClientVendor(@RequestBody ClientVendorDto clientVendorDto) {
+        return ResponseEntity.ok(
+                ResponseWrapper.builder()
+                        .success(true)
+                        .message("Successfully created clientVendor")
+                        .code(HttpStatus.OK.value())
+                        .data(clientVendorService.create(clientVendorDto))
+                        .build()
+        );
+    }
+
+    @Operation(
+            description = "Update clientVendor",
+            summary = "Create clientVendor (Admin user only)",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successfully updated clientVendor"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
+            }
+    )
+    @PreAuthorize("hasRole('Admin')")
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ResponseWrapper> updateClientVendor(@PathVariable Long id,
+                                                              @RequestBody ClientVendorDto clientVendorDto) {
+        return ResponseEntity.ok(
+                ResponseWrapper.builder()
+                        .success(true)
+                        .message("Successfully created clientVendor")
+                        .code(HttpStatus.OK.value())
+                        .data(clientVendorService.update(id,clientVendorDto))
+                        .build()
+        );
+    }
+
+
 }
 
 

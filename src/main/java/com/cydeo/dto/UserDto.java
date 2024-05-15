@@ -16,32 +16,36 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
 
+    @Schema(hidden = true)
     private Long id;
+
+    @Schema(example = "user@email.com")
     @NotBlank(message = "Username is required field.")
     @Size(min = 2, max = 50)
     private String username;   // must be unique
 
+    @Schema(example = "Abc1")
     @NotBlank(message = "Password is required field.")
     @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Schema(example = "Latif")
     @NotBlank(message = "First Name is required field.")
     @Size(min = 2, max = 50)
     private String firstname;
 
+    @Schema(example = "Zouliga")
     @NotBlank(message = "Last Name is required field.")
     @Size(min = 2, max = 50)
     private String lastname;
 
 
-//        @Pattern(regexp = "^\\+?\\d{1,3}\\s?\\(?\\d{3}\\)?\\s?\\d{3}-\\d{4}$\n",
-//                message = "Phone is required field and may be in any valid phone number format.")
-//    @Pattern(
-//            // +111 (202) 555-0125 // +1 (202) 555-0125   // +111 123 456 789
-//            regexp = " ^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$ |^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$ |^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$",
-//            message = "Phone is required field and may be in any valid phone number format."
-//    )
+    @Schema(example = "1-xxx-xxx-xxxx")
+    @Pattern(
+            regexp = "^1-[0-9]{3}?-[0-9]{3}?-[0-9]{4}$",
+            message = "Phone is required field and may be in any valid phone number format."
+    )
     private String phone;
 
     private boolean enabled;
@@ -52,8 +56,8 @@ public class UserDto {
     @Schema(description = "Company ID", implementation = CompanyIdOnly.class)
     private CompanyDto company;
 
+//    @Schema(hidden = true)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @Schema(hidden = true)
     boolean isOnlyAdmin;     //(should be true if this user is only admin of any company.)
 
 

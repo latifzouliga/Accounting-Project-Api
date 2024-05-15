@@ -16,6 +16,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Table(name = "clients_vendors")
 @SQLRestriction(value = "is_deleted=false")
 public class ClientVendor extends BaseEntity {
+
     @Column(nullable = false, length = 50)
     private String clientVendorName;
 
@@ -29,11 +30,10 @@ public class ClientVendor extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ClientVendorType clientVendorType;
 
-    @Valid
-    @ManyToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Address address;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
 
 

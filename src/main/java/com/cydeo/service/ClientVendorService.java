@@ -10,5 +10,9 @@ public interface ClientVendorService {
 
     List<ClientVendorDto> listAllClientVendors(int pageNo, int pageSize);
 
-    List<ClientVendorDto> listAllClientsClientVendorType(String clientVendorType, int pageNo, int pageSize);
+    List<ClientVendorDto> listAllByClientVendorType(String clientVendorType, int pageNo, int pageSize);
+
+    ClientVendorDto create(ClientVendorDto clientVendorDto);
+
+    ClientVendorDto update(Long clientVendorId, ClientVendorDto clientVendorDto);
 }
