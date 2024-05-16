@@ -60,8 +60,9 @@ public class ClientVendorDto {
     @Schema(hidden = true)
     private CompanyDto company;
 
+    @Schema(hidden = true)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private boolean hasInvoice;
+    private boolean hasInvoice = false;
 
 
 }

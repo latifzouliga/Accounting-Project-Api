@@ -18,4 +18,7 @@ public interface ClientVendorService {
     ClientVendorDto update(Long clientVendorId, ClientVendorDto clientVendorDto);
 
     ClientVendorDto patch(Long id, Map<String, Object> fields);
+
+    void delete(Long id);
+    ClientVendorDto findById(Long id);
 }

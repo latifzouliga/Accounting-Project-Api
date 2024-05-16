@@ -6,6 +6,7 @@ import com.cydeo.entity.Address;
 import com.cydeo.entity.ClientVendor;
 import com.cydeo.entity.User;
 import com.cydeo.enums.ClientVendorType;
+import com.cydeo.exception.ResourceNotFoundException;
 import com.cydeo.exception.ServiceException;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.ClientVendorRepository;
@@ -37,7 +38,11 @@ public class ClientVendorServiceImp implements ClientVendorService {
         String companyTitle = securityService.getLoggedInUser().getCompany().getTitle();
         return clientVendorRepository.findAllByCompany_Title(companyTitle, pageRequest)
                 .stream()
-                .map(clientVendor -> mapperUtil.convert(clientVendor, new ClientVendorDto()))
+                .map(cv -> {
+                    ClientVendorDto clientVendorDto = mapperUtil.convert(cv, new ClientVendorDto());
+                    clientVendorDto.setHasInvoice(checkIfHasInvoice(clientVendorDto));
+                    return clientVendorDto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -60,8 +65,12 @@ public class ClientVendorServiceImp implements ClientVendorService {
                         pageRequest
                 )
                 .stream()
-                .map(cv -> mapperUtil.convert(cv, new ClientVendorDto()))
-                .toList();
+                .map(cv -> {
+                    ClientVendorDto clientVendorDto = mapperUtil.convert(cv, new ClientVendorDto());
+                    clientVendorDto.setHasInvoice(checkIfHasInvoice(clientVendorDto));
+                    return clientVendorDto;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -72,12 +81,11 @@ public class ClientVendorServiceImp implements ClientVendorService {
         return mapperUtil.convert(clientVendor, new ClientVendorDto());
     }
 
-    // TODO: implement update client/vendor method
     @Override
     public ClientVendorDto update(Long clientVendorId, ClientVendorDto clientVendorDto) {
 
         ClientVendor clientVendor = clientVendorRepository.findById(clientVendorId)
-                .orElseThrow(() -> new ServiceException(String.valueOf(clientVendorId)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(clientVendorId)));
 
         clientVendorDto.setId(clientVendor.getId());
         clientVendorDto.getAddress().setId(clientVendor.getAddress().getId());
@@ -92,7 +100,7 @@ public class ClientVendorServiceImp implements ClientVendorService {
     public ClientVendorDto patch(Long id, Map<String, Object> fields) {
 
         ClientVendor clientVendor = clientVendorRepository
-                .findById(id).orElseThrow(() -> new ServiceException(String.valueOf(id)));
+                .findById(id).orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
         Address address = clientVendor.getAddress();
 
         fields.forEach((key, value) -> {
@@ -112,6 +120,44 @@ public class ClientVendorServiceImp implements ClientVendorService {
         });
 
         return mapperUtil.convert(clientVendorRepository.save(clientVendor), new ClientVendorDto());
+    }
+
+    @Override
+    public void delete(Long id) {
+        ClientVendor clientVendor = clientVendorRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
+        ClientVendorDto clientVendorDto = mapperUtil.convert(clientVendor, new ClientVendorDto());
+
+        if (checkIfHasInvoice(clientVendorDto)) {
+            throw new ServiceException(
+                    String.format("The %s %s has an invoice and can not be deleted",
+                            clientVendorDto.getClientVendorType().getValue(),
+                            clientVendorDto.getClientVendorName()));
+        }
+        clientVendor.setIsDeleted(true);
+        clientVendorRepository.save(clientVendor);
+
+    }
+
+    @Override
+    public ClientVendorDto findById(Long id) {
+        ClientVendor clientVendor = clientVendorRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
+        return mapperUtil.convert(clientVendor, new ClientVendorDto());
+    }
+
+    private boolean checkIfHasInvoice(ClientVendorDto clientVendorDto) {
+        String companyTitle = getLoggedInUser().getCompany().getTitle();
+        String clientVendorName = clientVendorDto.getClientVendorName();
+        Long  count = clientVendorRepository.countClientVendorInvoices(companyTitle, clientVendorName);
+        if (count == 0 ) {
+            return false;
+        }
+        clientVendorDto.setHasInvoice(true);
+        return true;
+
     }
 
     private User getLoggedInUser() {

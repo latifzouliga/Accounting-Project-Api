@@ -35,8 +35,7 @@ public class ClientVendorController {
             description = "Retrieve all clients/vendors",
             summary = "Access all clients/vendors resources (Root user only)",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Successfully retrieved clients-vendors data"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
+                    @ApiResponse(responseCode = "200", description = "Successfully retrieved clients-vendors data")
             }
     )
     @GetMapping("/list")
@@ -60,8 +59,7 @@ public class ClientVendorController {
             description = "Retrieve all clients or vendors using '/list/client' for clients and '/list/vendor' for vendors",
             summary = "Access all clients/vendors resources,  (Admin user only)",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Successfully retrieved clients/vendors data"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
+                    @ApiResponse(responseCode = "200", description = "Successfully retrieved clients/vendors data")
             }
     )
     @GetMapping("/list/{clientVendorType}")
@@ -87,8 +85,7 @@ public class ClientVendorController {
             description = "Create clientVendor",
             summary = "Create clientVendor (Admin user only)",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Successfully created clientVendor"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
+                    @ApiResponse(responseCode = "200", description = "Successfully created clientVendor")
             }
     )
     @PreAuthorize("hasRole('Admin')")
@@ -97,21 +94,20 @@ public class ClientVendorController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
-                ResponseWrapper.builder()
-                        .success(true)
-                        .message("Successfully created clientVendor")
-                        .code(HttpStatus.OK.value())
-                        .data(clientVendorService.create(clientVendorDto))
-                        .build()
-        );
+                        ResponseWrapper.builder()
+                                .success(true)
+                                .message("Successfully created clientVendor")
+                                .code(HttpStatus.OK.value())
+                                .data(clientVendorService.create(clientVendorDto))
+                                .build()
+                );
     }
 
     @Operation(
             description = "Update clientVendor",
             summary = "Create clientVendor (Admin user only)",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Successfully updated clientVendor"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
+                    @ApiResponse(responseCode = "200", description = "Successfully updated clientVendor")
             }
     )
     @PreAuthorize("hasRole('Admin')")
@@ -123,7 +119,7 @@ public class ClientVendorController {
                         .success(true)
                         .message("Successfully updated clientVendor")
                         .code(HttpStatus.OK.value())
-                        .data(clientVendorService.update(id,clientVendorDto))
+                        .data(clientVendorService.update(id, clientVendorDto))
                         .build()
         );
     }
@@ -133,21 +129,44 @@ public class ClientVendorController {
             description = "Patch clientVendor",
             summary = "Create clientVendor (Admin user only)",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Successfully updated clientVendor"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
+                    @ApiResponse(responseCode = "200", description = "Successfully updated clientVendor")
             }
     )
     @PreAuthorize("hasRole('Admin')")
     @PatchMapping("/patch/{id}")
-    public ResponseEntity<ResponseWrapper> patchClientVendor(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
+    public ResponseEntity<ResponseWrapper> patchClientVendor(@PathVariable Long id,
+                                                             @RequestBody Map<String, Object> fields) {
         return ResponseEntity.ok(
                 ResponseWrapper.builder()
                         .success(true)
                         .message("Successfully updated clientVendor field/s")
                         .code(HttpStatus.OK.value())
-                        .data(clientVendorService.patch(id,fields))
+                        .data(clientVendorService.patch(id, fields))
                         .build()
         );
+    }
+
+    @Operation(
+            description = "Delete clientVendor",
+            summary = "Create clientVendor (Admin user only)",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successfully deleted clientVendor")
+            }
+    )
+    @PreAuthorize("hasRole('Admin')")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseWrapper> deleteClientVendor(@PathVariable Long id) {
+        clientVendorService.delete(id);
+        ClientVendorDto clientVendorDto = clientVendorService.findById(id);
+        return ResponseEntity
+                .ok(ResponseWrapper.builder()
+                        .success(true)
+                        .message(String.format("Successfully deleted %s %s",
+                                clientVendorDto.getClientVendorName(),
+                                clientVendorDto.getClientVendorType().getValue()))
+                        .code(HttpStatus.NO_CONTENT.value())
+                        .build()
+                );
     }
 
 }
