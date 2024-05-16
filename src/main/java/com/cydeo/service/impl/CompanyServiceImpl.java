@@ -25,15 +25,8 @@ import java.util.stream.Collectors;
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
-    private final AddressService addressService;
-    private final AddressRepository addressRepository;
     private final MapperUtil mapperUtil;
-    private final SecurityService securityService;
 
-    @Override
-    public CompanyDto getCompanyDtoByLoggedInUser() {
-        return null;
-    }
 
     @Override
     public List<CompanyDto> listAllCompanies(int pageNo, int pageSize) {
@@ -80,7 +73,9 @@ public class CompanyServiceImpl implements CompanyService {
         switch (companyStatus) {
             case "active" -> company.setCompanyStatus(CompanyStatus.ACTIVE);
             case "passive" -> company.setCompanyStatus(CompanyStatus.PASSIVE);
-            default -> throw new ServiceException("Wrong company companyStatus. Please use Active/Passive: " + companyStatus);
+            default -> throw new ServiceException(
+                    "Wrong company companyStatus. Please use Active/Passive: " + companyStatus
+            );
         }
 
         companyRepository.save(company);
@@ -94,9 +89,6 @@ public class CompanyServiceImpl implements CompanyService {
         return mapperUtil.convert(company, new CompanyDto());
     }
 
-    private User getLoggeDIndUser() {
-        return securityService.getLoggedInUser();
-    }
 }
 
 

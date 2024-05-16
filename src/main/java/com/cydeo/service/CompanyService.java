@@ -8,8 +8,6 @@ import java.util.List;
 @Service
 public interface CompanyService {
 
-    CompanyDto getCompanyDtoByLoggedInUser();
-
     List<CompanyDto> listAllCompanies(int pageNo, int pageSize);
 
     CompanyDto findCompanyByCompanyTitle(String companyTitle);
