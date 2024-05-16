@@ -25,11 +25,10 @@ import java.util.stream.Collectors;
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
-    private final AddressService addressService;
-    private final AddressRepository addressRepository;
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
 
+    // TODO: REVISE THIS CLASS
     @Override
     public CompanyDto getCompanyDtoByLoggedInUser() {
         return null;
