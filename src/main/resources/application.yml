@@ -63,10 +63,10 @@ master:
 #country:
 #    api:
 #      email: ap.cydeo@gmail.com
-#      token: token=guHIffIBNGDFLlWJ3Db8HRrife99voQzn-go0bWhPgPh6rDm1xLBUxzbFB2XhyCNRWM
+#      token: token=guHIffIBNGDFLlWJ3Db8HRrife99voQzn-go0bWhPgPh6rDm1xLBUxzbFB2XhyCNRWMM
 #
 ### stripe
 #stripe:
 #  public:
-#    key: pk_test_51P6ex0DZFwEius7mXDCyyZM4wxzWhrKi3IBGigZiXWNP8ajyz8yC8b2YLcWj1CYtSiGKZEGgu3C3kF8kTAWmJ11C00YNhZvYuP
-#  secret: sk_test_51P6ex0DZFwEius7mp1NH0CcvQy81Rl0hLfkEE97S032IRX2OLXetv4pPGMrmz6kEgEzG9MdwOTkaYsu0Rk6LSOli00QUQTzDk6
+#    key: pk_test_51P6ex0DZFwEius7mXDCyyZM4wxzWhrKi3IBGigZiXWNP8ajyz8yC8b2YLcWj1CYtSiGKZEGgu3C3kF8kTAWmJ11C00YNhZvYuPR
+#  secret: sk_test_51P6ex0DZFwEius7mp1NH0CcvQy81Rl0hLfkEE97S032IRX2OLXetv4pPGMrmz6kEgEzG9MdwOTkaYsu0Rk6LSOli00QUQTzDk6D
