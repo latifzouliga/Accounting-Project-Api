@@ -28,11 +28,6 @@ public class CompanyServiceImpl implements CompanyService {
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
 
-    // TODO: REVISE THIS CLASS
-    @Override
-    public CompanyDto getCompanyDtoByLoggedInUser() {
-        return null;
-    }
 
     @Override
     public List<CompanyDto> listAllCompanies(int pageNo, int pageSize) {
@@ -93,9 +88,6 @@ public class CompanyServiceImpl implements CompanyService {
         return mapperUtil.convert(company, new CompanyDto());
     }
 
-    private User getLoggeDIndUser() {
-        return securityService.getLoggedInUser();
-    }
 }
 
 
