@@ -50,11 +50,7 @@ Depending on your operating system, follow the appropriate steps to get the serv
 - **Classes:**
     - Start with an uppercase and use CamelCase.
     - *Example:* `UserService`
-- **Branching Strategy:**
-    - use jira ticket names.
-    - *Example:* `EU11-34`
-- ** Commit Messages:**
-    - EU11-34: Add company entity and dto
+
 - **Methods:**
     - Start with a lowercase and use camelCase.
     - *Example:* `getUserData()`
