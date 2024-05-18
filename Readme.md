@@ -6,7 +6,7 @@ The `Accounting Application` is a Maven-based Spring Boot application, leveragin
 
 Before you begin, ensure you have met the following requirements:
 
-- Java 21
+- Java 17
 - Maven
 - Docker
 - Access to PostgreSQL (locally or through a service)
