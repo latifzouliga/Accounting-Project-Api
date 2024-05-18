@@ -1,6 +1,7 @@
 package com.cydeo.entity.common;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,28 +14,39 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @MappedSuperclass
-@EntityListeners(BaseEntityListener.class)
+@EntityListeners({AuditingEntityListener.class})
 public abstract class BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, updatable = false)
-    public LocalDateTime insertDateTime;
+    @CreatedDate
+    @Column(
+            nullable = false,
+            updatable = false
+    )
+    public LocalDateTime createdDate;
 
-    @Column(nullable = false)
-    public LocalDateTime lastUpdateDateTime;
+    @LastModifiedDate
+    @Column(insertable = false)
+    public LocalDateTime lastModified;
 
-    @Column(updatable = false,nullable = false)
-    public String insertUserId;
+    @CreatedBy
+    @Column(
+            nullable = false,
+            updatable = false
+    )
+    public String createdBy;
 
-    @Column(nullable = false, updatable = false)
-    public String lastUpdateUserId;
+    @LastModifiedBy
+    @Column(insertable = false)
+    public String lastModifiedBy;
 
     private Boolean isDeleted = false;
 

@@ -2,12 +2,15 @@ package com.cydeo;
 
 ;
 import com.cydeo.controller.Utility;
+import com.cydeo.entity.common.ApplicationAudiAware;
 import com.cydeo.service.KeycloakService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,29 +24,20 @@ import java.util.Objects;
 
 import static com.cydeo.controller.Utility.getToken;
 
+@RequiredArgsConstructor
 @SpringBootApplication
-//@EnableJpaAuditing
 public class AccountingProjectApiApplication {
 
     private final KeycloakService keycloakService;
 
-    public AccountingProjectApiApplication(KeycloakService keycloakService) {
-        this.keycloakService = keycloakService;
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(AccountingProjectApiApplication.class, args);
     }
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
+
 
     @Bean
     public CommandLineRunner commandLineRunner() {
@@ -52,9 +46,9 @@ public class AccountingProjectApiApplication {
 
 //            keycloakService.deleteAllOrphanedUsers(); //delete orphaned users in keycloak database
 
-            System.out.println("\n\n\n=====================================================\n\t\tAdmin Token:\n");
+//            System.out.println("\n\n\n=====================================================\n\t\tAdmin Token:\n");
 //            System.out.println(getToken(admin, password));
-            System.out.println("\n=====================================================\n\t\tRoot Token");
+//            System.out.println("\n=====================================================\n\t\tRoot Token");
 //            System.out.println(getToken(root, password));
         };
 
