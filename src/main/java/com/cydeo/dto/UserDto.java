@@ -58,7 +58,7 @@ public class UserDto {
 
 //    @Schema(hidden = true)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    boolean isOnlyAdmin;     //(should be true if this user is only admin of any company.)
+    boolean onlyAdmin;     //(should be true if this user is only admin of any company.)
 
 
     @Getter

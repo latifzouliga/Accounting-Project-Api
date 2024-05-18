@@ -2,6 +2,8 @@ package com.cydeo;
 
 ;
 import com.cydeo.controller.Utility;
+import com.cydeo.dto.RoleDto;
+import com.cydeo.dto.UserDto;
 import com.cydeo.entity.common.ApplicationAudiAware;
 import com.cydeo.service.KeycloakService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import static com.cydeo.controller.Utility.getToken;
@@ -36,20 +39,43 @@ public class AccountingProjectApiApplication {
     }
 
 
-
-
-
     @Bean
     public CommandLineRunner commandLineRunner() {
 
         return args -> {
 
-//            keycloakService.deleteAllOrphanedUsers(); //delete orphaned users in keycloak database
+            // users for keycloak server
+            UserDto rootUser = UserDto.builder()
+                    .username("root@cydeo.com")
+                    .password("Abc1")
+                    .firstname("Robert")
+                    .lastname("Martin")
+                    .role(RoleDto.builder().description("Root").build())
+                    .build();
 
-//            System.out.println("\n\n\n=====================================================\n\t\tAdmin Token:\n");
-//            System.out.println(getToken(admin, password));
-//            System.out.println("\n=====================================================\n\t\tRoot Token");
-//            System.out.println(getToken(root, password));
+            UserDto admin = UserDto.builder()
+                    .username("admin@greentech.com")
+                    .password("Abc1")
+                    .firstname("Mary")
+                    .lastname("Grant")
+                    .role(RoleDto.builder().description("Admin").build())
+                    .build();
+
+            UserDto manager = UserDto.builder()
+                    .username("manager@greentech.com")
+                    .password("Abc1")
+                    .firstname("Robert")
+                    .lastname("Noah")
+                    .role(RoleDto.builder().description("Manager").build())
+                    .build();
+
+            List<UserDto> userDtoList = List.of(rootUser, admin, manager);
+
+
+            keycloakService.deleteAllOrphanedUsers();
+            userDtoList.forEach(keycloakService::userCreate);
+
+
         };
 
     }

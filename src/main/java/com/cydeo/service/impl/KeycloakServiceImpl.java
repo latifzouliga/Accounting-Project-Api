@@ -131,14 +131,14 @@ public class KeycloakServiceImpl implements KeycloakService {
     @Override
     public void deleteAllOrphanedUsers() {
 
-        List<String> userList = userRepository.findAll().stream().map(User::getUsername).toList();
+//        List<String> userList = userRepository.findAll().stream().map(User::getUsername).toList();
         RealmResource realmResource = getKeycloakInstance().realm(keycloakProperties.getRealm());
         List<UserRepresentation> keycloakUsers = realmResource.users().list();
 
         for (UserRepresentation each : keycloakUsers) {
-            if (!userList.contains(each.getUsername())) {
+//            if (!userList.contains(each.getUsername())) {
                 delete(each.getUsername());
-            }
+//            }
         }
     }
 

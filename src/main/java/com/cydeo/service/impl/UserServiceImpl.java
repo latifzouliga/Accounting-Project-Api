@@ -4,6 +4,7 @@ import com.cydeo.dto.RoleDto;
 import com.cydeo.dto.UserDto;
 import com.cydeo.entity.User;
 import com.cydeo.exception.ResourceNotFoundException;
+import com.cydeo.exception.ServiceException;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.RoleRepository;
 import com.cydeo.repository.UserRepository;
@@ -58,6 +59,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto create(UserDto userDto) {
         RoleDto roleDto = roleService.findById(userDto.getRole().getId());
+        if (roleDto.getDescription().startsWith("Root")){
+            throw  new ServiceException("Can not create user with Root role. Please chose different one");
+        }
         userDto.setRole(roleDto);  // to make keycloak works properly
         String password = userDto.getPassword();
         User user = mapper.convert(userDto, new User());
