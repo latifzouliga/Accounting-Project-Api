@@ -16,7 +16,8 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query("SELECT c FROM Company c WHERE c.title <> 'CYDEO'")
     List<Company> findAllCompanies(Pageable pageable);
 
-    Optional<Company> findAllByTitle(String companyTitle);
+//    Optional<Company> findAllByTitle(String companyTitle);
+    Optional<Company> findByTitle(String companyTitle);
 
 
 }

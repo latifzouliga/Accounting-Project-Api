@@ -40,7 +40,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto findCompanyByCompanyTitle(String companyTitle) {
-        Company company = companyRepository.findAllByTitle(companyTitle)
+        Company company = companyRepository.findByTitle(companyTitle)
                 .orElseThrow(() -> new ResourceNotFoundException(companyTitle));
         return mapperUtil.convert(company, new CompanyDto());
     }
@@ -55,7 +55,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto update(CompanyDto updatedCompany) {
-        Company existingCompany = companyRepository.findAllByTitle(updatedCompany.getTitle())
+        Company existingCompany = companyRepository.findByTitle(updatedCompany.getTitle())
                 .orElseThrow(() -> new ResourceNotFoundException(updatedCompany.getTitle()));
 
         Long existingAddressId = existingCompany.getAddress().getId();
@@ -71,7 +71,7 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(companyId)));
 
-        switch (companyStatus) {
+        switch (companyStatus.toLowerCase().trim()) {
             case "active" -> company.setCompanyStatus(CompanyStatus.ACTIVE);
             case "passive" -> company.setCompanyStatus(CompanyStatus.PASSIVE);
             default -> throw new ServiceException("Wrong company companyStatus. Please use Active/Passive: " + companyStatus);
