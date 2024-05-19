@@ -44,6 +44,7 @@ public class AccountingProjectApiApplication {
 
         return args -> {
 
+
             // users for keycloak server
             UserDto rootUser = UserDto.builder()
                     .username("root@cydeo.com")

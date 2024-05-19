@@ -6,9 +6,9 @@ spring:
   application:
     name: Accounting Application
   datasource:
-    url: jdbc:postgresql://localhost:5432/accounting-group-3
+    url: jdbc:postgresql://localhost:5432/accounting-app-api
     username: postgres
-    password: DataMind
+    password: admin
     driver-class-name: org.postgresql.Driver
 
 
@@ -45,7 +45,7 @@ keycloak:
   ssl-required: external
   resource: Accounting-Project-Api
   credentials:
-    secret: aC6w0mwERcfbT7iy0bYO76kjQFldFWE9
+    secret: wV5ySbtiw7E2DppfgmMdK16adcEndRCy
   use-resource-role-mappings: true
   bearer-only: true
 

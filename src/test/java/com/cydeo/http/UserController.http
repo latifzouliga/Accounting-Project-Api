@@ -3,7 +3,7 @@
 POST http://localhost:8080/realms/zouliga-dev/protocol/openid-connect/token
 Content-Type: application/x-www-form-urlencoded
 
-grant_type=password&client_id=Accounting-Project-Api&username=root@cydeo.com&password=Abc1&client_secret=aC6w0mwERcfbT7iy0bYO76kjQFldFWE9
+grant_type=password&client_id=Accounting-Project-Api&username=root@cydeo.com&password=Abc1&client_secret=wV5ySbtiw7E2DppfgmMdK16adcEndRCy
 
 > {% client.global.set("auth-token", response.body.access_token);  %}
 
