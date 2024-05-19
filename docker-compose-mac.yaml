@@ -1,42 +1,55 @@
-version: '3.1'
-services:                             # Which containers I need.
-  app:                                # First container.
-    networks:                         # Which network this container will use.
-      - accounting-network
-    container_name: accounting
-    image: "owermaiden/accounting:latest"  # for mac (with m1 / m2 chip)
-    environment:                      # Attach this environment variables to my container
-      SPRING_PROFILES_ACTIVE: default # Which profile you want to use dev / test etc.
-      DATABASE_HOST: db               # Who is the host for database, localhost or do you have other container
-      DATABASE_PORT: 5432             # Database provider will be waiting us at 5433 - Other container's port
-      #DATABASE_NAME: accounting-group-3           # Database name
-      DATABASE_NAME: cacoon           # Database name
-      DATABASE_USERNAME: postgres     # Database username
-      DATABASE_PASSWORD: admin        # Database password
-      DATABASE_SSL: 'false'
-      SLEEP_LENGTH: 5
-    ports:
-      - "8002:8002"                     # This container will connect with my application on 8002
-    depends_on:                       # Before running this container I need 'db' container ready.
-      - db
+#version: '3.1'
+#services:
+#  accounting-api:
+#    container_name: accounting
+#    image: ${GROUP_ID}/Accounting-Project-Api:${SERVICE_VERSION:-latest}
+#    environment:
+#      SPRING_PROFILES_ACTIVE: default
+#      DATABASE_HOST: database
+#      DATABASE_PORT: 5432
+#      DATABASE_NAME: accounting-api
+#      DATABASE_USERNAME: postgres
+#      DATABASE_PASSWORD: admin
+#      DATABASE_SSL: 'false'
+#      SLEEP_LENGTH: 5
+#    ports:
+#      - "8002:8002"
+#    depends_on:
+#      - database
+#      -
+#  database:
+#    image: postgres
+#    container_name: database
+#    networks:
+#      - backend
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - .m2:/root/.m2
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: admin
+#      POSTGRES_DB: accounting-api
+#
+#  keycloak:
+#    container_name: keycloak_blog
+#    image: "quay.io/keycloak/keycloak:22.0.3"
+#    volumes:
+#      - ./keycloak-data:/opt/keycloak/data/h2
+#    environment:
+#      - KEYCLOAK_ADMIN=admin
+#      - KEYCLOAK_ADMIN_PASSWORD=admin
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - backend
+#
+#networks:
+#  backend:
+#    driver: bridge
+#
+#
+#volumes:
+#  database:
 
-  db:                             # Second container.
-    image: postgres               # Use official postgres image to run my container
-    container_name: db
-    networks:
-      - accounting-network        # Which network this container will use.
-    ports:
-      - "5432:5432"                 # Container will expose 5432 outside, POSTGRES will connect with container on 5432
-    volumes:
-      - .m2:/root/.m2             # Save my data inside hosting OS ".m2:/root/.m2 folder"
-    environment:
-      POSTGRES_USER: postgres     # Postgres inside this container has this credentials
-      POSTGRES_PASSWORD: admin
-      #POSTGRES_DB: accounting-group-3
-      POSTGRES_DB: cacoon
 
-networks:                         # Create this network so as our containers can communicate each other.
-  accounting-network:
-
-volumes:                          # Create this volume so that containers can save persisting data in it.
-  db:
