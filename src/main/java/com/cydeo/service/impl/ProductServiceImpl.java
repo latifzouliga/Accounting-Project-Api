@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private User getCurrentUser(){
-        securityService.getLoggedInUser();
+       return securityService.getLoggedInUser();
     }
 }
 
