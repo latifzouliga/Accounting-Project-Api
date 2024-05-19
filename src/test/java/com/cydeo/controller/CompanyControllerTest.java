@@ -64,21 +64,7 @@ class CompanyControllerTest {
     @Test
     void createCompany() throws Exception {
 
-        Address address = new Address();
-        address.setId(3L);
-        address.setAddressLine1("1232c12 main st");
-        address.setAddressLine2("1232c12 main st");
-        address.setCity("Pittsburgh");
-        address.setState("Pa");
-        address.setCountry("USA");
-        address.setZipCode("12312");
-        Company company = new Company();
-        company.setId(3L);
-        company.setTitle("Green Tech co12");
-        company.setPhone("1-111-111-1111");
-        company.setWebsite("www.example.com");
-        company.setAddress(address);
-
+        Company company = getCompany();
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/companies/create")
@@ -93,20 +79,7 @@ class CompanyControllerTest {
 
     @Test
     void updateCompany() throws Exception {
-        Address address = new Address();
-        address.setId(3L);
-        address.setAddressLine1("1232c12 main st");
-        address.setAddressLine2("1232c12 main st");
-        address.setCity("Pittsburgh");
-        address.setState("Pa");
-        address.setCountry("USA");
-        address.setZipCode("12312");
-        Company company = new Company();
-        company.setId(3L);
-        company.setTitle("Green Tech co12");
-        company.setPhone("1-111-111-1111");
-        company.setWebsite("www.example.com");
-        company.setAddress(address);
+        Company company = getCompany();
 
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -123,6 +96,19 @@ class CompanyControllerTest {
 
     @Test
     void activateCompany() throws Exception {
+        Company company = getCompany();
+        company.setCompanyStatus(CompanyStatus.ACTIVE);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/companies/update-status/3/active")
+                .header(AUTHORIZATION, bearerToken)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("data.companyStatus").value("ACTIVE"));
+
+
+    }
+
+    private static Company getCompany() {
         Address address = new Address();
         address.setId(3L);
         address.setAddressLine1("1232c12 main st");
@@ -138,13 +124,6 @@ class CompanyControllerTest {
         company.setWebsite("www.example.com");
         company.setAddress(address);
         company.setCompanyStatus(CompanyStatus.PASSIVE);
-
-        mockMvc.perform(MockMvcRequestBuilders.put("/companies/update-status/3/active")
-                .header(AUTHORIZATION, bearerToken)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("data.companyStatus").value("ACTIVE"));
-
-
+        return company;
     }
 }
