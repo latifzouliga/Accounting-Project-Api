@@ -45,7 +45,7 @@ public class UserController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
-    @PreAuthorize("hasAnyRole('Admin', 'Root')")
+    @PreAuthorize("hasAnyRole('Admin', 'Root User')")
     @PostMapping("/create")
     public ResponseEntity<ResponseWrapper> create(@Valid @RequestBody UserDto userDto) {
         UserDto user = userService.create(userDto);
@@ -106,7 +106,7 @@ public class UserController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
-    @PreAuthorize("hasAnyRole('Root','Admin')")
+    @PreAuthorize("hasAnyRole('Root User','Admin')")
     @PutMapping("/update")
     public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDto userDto) {
         UserDto user = userService.update(userDto);
@@ -143,7 +143,7 @@ public class UserController {
             }
     )
 
-    @PreAuthorize("hasAnyRole('Root','Admin')")
+    @PreAuthorize("hasAnyRole('Root User','Admin')")
     @PatchMapping("/update/{username}")
     public ResponseEntity<ResponseWrapper> patchUser(@Valid @PathVariable String username,
                                                      @RequestBody() Map<String, Object> field) {
@@ -207,7 +207,7 @@ public class UserController {
                     @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
             }
     )
-    @PreAuthorize("hasAnyRole('Admin', 'Root')")
+    @PreAuthorize("hasAnyRole('Admin', 'Root User')")
     @GetMapping("/{username}")
     public ResponseEntity<ResponseWrapper> getUser(@PathVariable String username) {
         return ResponseEntity.ok(

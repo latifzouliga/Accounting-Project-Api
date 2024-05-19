@@ -27,7 +27,7 @@ public class Utils {
     }
 
     static String getAdminToken() {
-        USERNAME = "admin@bluetech.com";
+        USERNAME = "admin@greentech.com";
         return getToken(USERNAME, PASSWORD);
     }
     static String getAdminToken(String username,String password) {
@@ -58,7 +58,7 @@ public class Utils {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>() {{
             add("grant_type", "password");
             add("client_id", "Accounting-Project-Api");
-            add("client_secret", "aC6w0mwERcfbT7iy0bYO76kjQFldFWE9");
+            add("client_secret", "wV5ySbtiw7E2DppfgmMdK16adcEndRCy");
             add("username", username);
             add("password", password);
             add("scope", "openid");

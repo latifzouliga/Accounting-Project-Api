@@ -51,7 +51,7 @@ public class AccountingProjectApiApplication {
                     .password("Abc1")
                     .firstname("Robert")
                     .lastname("Martin")
-                    .role(RoleDto.builder().description("Root").build())
+                    .role(RoleDto.builder().description("Root User").build())
                     .build();
 
             UserDto admin = UserDto.builder()

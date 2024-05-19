@@ -130,14 +130,14 @@ class CompanyServiceImplTest {
         company.setTitle(companyTitle);
         company.setAddress(address);
 
-        when(companyRepository.findByTitle(companyTitle)).thenReturn(Optional.of(company));
+        when(companyRepository.findById(companyDto.getId())).thenReturn(Optional.of(company));
         when(companyRepository.save(company)).thenReturn(company);
         doReturn(company).when(mapperUtil).convert(any(CompanyDto.class), any(Company.class));
         companyDto.setId(company.getId());
 
-        CompanyDto returnedResult = companyService.update(companyDto);
+        CompanyDto returnedResult = companyService.update(companyDto.getId(),companyDto);
 
-        verify(companyRepository).findByTitle(companyTitle);
+        verify(companyRepository).findById(companyDto.getId());
         verify(companyRepository).save(company);
         assertEquals(companyDto, returnedResult);
 

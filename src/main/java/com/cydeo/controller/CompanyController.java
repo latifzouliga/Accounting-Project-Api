@@ -25,7 +25,7 @@ import java.util.List;
         produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
 )
 @SecurityRequirement(name = "bearerAuth")
-@PreAuthorize("hasRole('Root')")
+@PreAuthorize("hasRole('Root User')")
 public class CompanyController {
 
     private final CompanyService companyService;
@@ -105,14 +105,15 @@ public class CompanyController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized / Invalid Token")
             }
     )
-    @PostMapping("/update")
-    public ResponseEntity<ResponseWrapper> updateCompany(@Valid @RequestBody CompanyDto companyDto) {
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ResponseWrapper> updateCompany(@Valid@ PathVariable Long id,
+                                                         @RequestBody CompanyDto companyDto) {
         return ResponseEntity.ok(
                 ResponseWrapper.builder()
                         .code(HttpStatus.OK.value())
                         .success(true)
                         .message(String.format("Successfully updated %s company data", companyDto.getTitle()))
-                        .data(companyService.update(companyDto))
+                        .data(companyService.update(id, companyDto))
                         .build()
         );
     }

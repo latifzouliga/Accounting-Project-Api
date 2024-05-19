@@ -14,7 +14,7 @@ public interface CompanyService {
 
     CompanyDto create(CompanyDto companyDto);
 
-    CompanyDto update(CompanyDto companyDto);
+    CompanyDto update(Long id, CompanyDto companyDto);
 
     CompanyDto activateDeactivate(Long companyId, String status);
 

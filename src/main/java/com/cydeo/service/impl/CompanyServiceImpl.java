@@ -54,9 +54,9 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyDto update(CompanyDto updatedCompany) {
-        Company existingCompany = companyRepository.findByTitle(updatedCompany.getTitle())
-                .orElseThrow(() -> new ResourceNotFoundException(updatedCompany.getTitle()));
+    public CompanyDto update(Long id, CompanyDto updatedCompany) {
+        Company existingCompany = companyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
 
         Long existingAddressId = existingCompany.getAddress().getId();
 
