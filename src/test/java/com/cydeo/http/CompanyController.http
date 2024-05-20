@@ -1,0 +1,54 @@
+
+### Root
+POST http://localhost:8080/realms/zouliga-dev/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type = password &
+client_id = Accounting-Project-Api &
+username = root@cydeo.com &
+password = Abc1 &
+client_secret = wV5ySbtiw7E2DppfgmMdK16adcEndRCy
+
+> {%
+    client.global.set("auth-token", response.body.access_token);
+%}
+
+### List all companies
+GET http://localhost:8081/api/v1/companies/list
+Content-Type: application/json
+Authorization: Bearer {{auth-token}}
+
+### Get Company By Id
+GET http://localhost:8081/api/v1/companies/list/2
+Accept: application/xml
+Authorization: Bearer {{auth-token}}
+
+### Update company
+PUT http://localhost:8081/api/v1/companies/update/4
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{auth-token}}
+
+{
+  "title": "Cydeo co",
+  "phone": "+1 (215) 846-2642",
+  "website": "https://www.redtech.com",
+  "address": {
+    "id": 4,
+    "addressLine1": "123 main st",
+    "addressLine2": "Triangle Square",
+    "city": "Los Angeles",
+    "state": "California",
+    "country": "United States",
+    "zipCode": "54782-5214"
+  },
+  "companyStatus": "PASSIVE"
+}
+
+### Change company status
+PUT http://localhost:8081/api/v1/companies/update-status/4/active
+Accept: application/json
+Authorization: Bearer {{auth-token}}
+
+
+

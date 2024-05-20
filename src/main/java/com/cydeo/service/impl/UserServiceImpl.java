@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findByUsername(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException(username));
-        if (getLoggedInUser().getRole().getDescription().equalsIgnoreCase("Root User")) {
+        if (getLoggedInUser().getRole().getDescription().equals("Root User")) {
             if (user.getRole().getDescription().equalsIgnoreCase("Admin")) {
                 return mapper.convert(user, new UserDto());
             }
@@ -59,8 +59,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto create(UserDto userDto) {
         RoleDto roleDto = roleService.findById(userDto.getRole().getId());
-        if (roleDto.getDescription().startsWith("Root")){
-            throw  new ServiceException("Can not create user with Root role. Please chose different one");
+        if (roleDto.getDescription().equals("Root User")) {
+            throw new ServiceException("Can not create user with Root role. Please chose different one");
         }
         userDto.setRole(roleDto);  // to make keycloak works properly
         String password = userDto.getPassword();
@@ -172,7 +172,7 @@ public class UserServiceImpl implements UserService {
         boolean isAdmin = user.getRole().getDescription().equalsIgnoreCase("Admin");
         boolean isRootUser = user.getRole().getDescription().equalsIgnoreCase("Root User");
 
-        if (username.equalsIgnoreCase(loggedInUser.getUsername())) {
+        if (username.equals(loggedInUser.getUsername())) {
             throw new RuntimeException("You are the Admin. You can not delete yourself");
         }
 
@@ -199,8 +199,10 @@ public class UserServiceImpl implements UserService {
     private boolean isOnlyAdmin(UserDto userDto) {
         String role = userDto.getRole().getDescription();
         String admin = "Admin";
-        if (role.equalsIgnoreCase(admin)) {
-            List<User> userList = userRepository.findAllByCompany_TitleAndRole_Description(userDto.getCompany().getTitle(), admin);
+        String companyTitle = userDto.getCompany().getTitle();
+
+        if (role.equals(admin)) {
+            List<User> userList = userRepository.findAllByCompany_TitleAndRole_Description(companyTitle, admin);
             return userList.size() == 1;
         }
         return false;
