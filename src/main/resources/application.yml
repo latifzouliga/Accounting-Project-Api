@@ -17,9 +17,12 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
     hibernate:
       ddl-auto: create
     defer-datasource-initialization: true
+    database: postgresql
+
   main:
     allow-circular-references: true
   sql:
