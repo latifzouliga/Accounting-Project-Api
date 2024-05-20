@@ -1,10 +1,14 @@
 package com.zouliga.service.impl;
 
+import com.zouliga.dto.AddressDto;
 import com.zouliga.dto.ClientVendorDto;
+import com.zouliga.dto.CompanyDto;
+import com.zouliga.entity.Address;
 import com.zouliga.entity.ClientVendor;
 import com.zouliga.entity.Company;
 import com.zouliga.entity.User;
 import com.zouliga.enums.ClientVendorType;
+import com.zouliga.enums.CompanyStatus;
 import com.zouliga.mapper.MapperUtil;
 import com.zouliga.repository.ClientVendorRepository;
 import com.zouliga.service.SecurityService;
@@ -21,8 +25,7 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -61,16 +64,6 @@ class ClientVendorServiceImpTest {
 
     }
 
-    private static User getGetLoggedInUser() {
-        Company company = new Company();
-        company.setTitle("Company 1");
-        User user = new User();
-        user.setUsername("mike");
-        user.setPassword("Abc1");
-        user.setCompany(company);
-        return user;
-    }
-
 
     @Test
     void listAllByClientVendorType() {
@@ -99,10 +92,58 @@ class ClientVendorServiceImpTest {
                 ClientVendorType.CLIENT,
                 pageRequest);
         Assertions.assertEquals(expectedClientVendorList, returnedClientVenderList);
-        Assertions.assertEquals(returnedClientVenderList.get(0).getClientVendorType(),ClientVendorType.CLIENT);
+        Assertions.assertEquals(returnedClientVenderList.get(0).getClientVendorType(), ClientVendorType.CLIENT);
 
     }
 
+    @Test
+    void create() {
+
+        User loggedInUser = getGetLoggedInUser();
+
+        ClientVendorDto clientVendorDto = getClientVendorDto();
+        ClientVendor clientVendor = getClientVendor();
+
+
+        when(securityService.getLoggedInUser()).thenReturn(loggedInUser);
+        doReturn(clientVendor).when(mapperUtil).convert(any(ClientVendorDto.class), any(ClientVendor.class));
+        when(clientVendorRepository.save(clientVendor)).thenReturn(clientVendor);
+        doReturn(clientVendorDto).when(mapperUtil).convert(any(ClientVendor.class), any(ClientVendorDto.class));
+
+        ClientVendorDto returnedResult = clientVendorService.create(clientVendorDto);
+
+        verify(clientVendorRepository).save(clientVendor);
+        Assertions.assertEquals(clientVendorDto, returnedResult);
+
+
+    }
+
+    @Test
+    void update() {
+    }
+
+    @Test
+    void patch() {
+    }
+
+    @Test
+    void delete() {
+    }
+
+    @Test
+    void findById() {
+    }
+
+
+
+
+
+
+    /**
+     * Test Data: loggedInUser, clientVendorDto, clientVendor, clientVendorDtoList, clientVendorList
+     *
+     * @return
+     */
     private static List<ClientVendor> getClientVendorList() {
         ClientVendor clientVendor1 = new ClientVendor();
         clientVendor1.setClientVendorName("Client company 1");
@@ -131,26 +172,91 @@ class ClientVendorServiceImpTest {
                         .clientVendorType(ClientVendorType.CLIENT)
                         .build()
         );
-
     }
 
-    @Test
-    void create() {
+
+    private static User getGetLoggedInUser() {
+        Address address = new Address();
+        address.setAddressLine1("123 main st");
+        address.setAddressLine2("Suite 100");
+        address.setCity("Pittsburgh");
+        address.setState("PA");
+        address.setCountry("USA");
+        address.setZipCode("15555");
+
+        Company company = new Company();
+        company.setTitle("Green tech");
+        company.setPhone("1-123-456-7890");
+        company.setWebsite("www.example.com");
+        company.setCompanyStatus(CompanyStatus.ACTIVE);
+        company.setAddress(address);
+
+
+        User user = new User();
+        user.setUsername("mike");
+        user.setPassword("Abc1");
+        user.setCompany(company);
+        return user;
     }
 
-    @Test
-    void update() {
+
+    private static ClientVendorDto getClientVendorDto() {
+        AddressDto addressDto = AddressDto.builder()
+                .addressLine1("123 main st")
+                .addressLine2("Suite 100")
+                .city("Pittsburgh")
+                .state("PA")
+                .country("USA")
+                .zipCode("15555")
+                .build();
+
+        CompanyDto companyDto = CompanyDto.builder()
+                .title("Green tech")
+                .phone("1-123-456-7890")
+                .website("www.example.com")
+                .address(addressDto)
+                .companyStatus(CompanyStatus.ACTIVE)
+                .build();
+
+        return ClientVendorDto.builder()
+                .clientVendorName("Green tech")
+                .phone("1-123-456-7890")
+                .website("www.example.com")
+                .clientVendorType(ClientVendorType.CLIENT)
+                .address(addressDto)
+                .company(companyDto)
+                .hasInvoice(false)
+                .build();
     }
 
-    @Test
-    void patch() {
+    private static ClientVendor getClientVendor() {
+        Address address = new Address();
+        address.setAddressLine1("123 main st");
+        address.setAddressLine2("Suite 100");
+        address.setCity("Pittsburgh");
+        address.setState("PA");
+        address.setCountry("USA");
+        address.setZipCode("15555");
+
+
+        Company company = new Company();
+        company.setTitle("Green tech");
+        company.setPhone("1-123-456-7890");
+        company.setWebsite("www.example.com");
+        company.setAddress(address);
+        company.setCompanyStatus(CompanyStatus.ACTIVE);
+
+
+        ClientVendor clientVendor = new ClientVendor();
+        clientVendor.setClientVendorName("Green tech");
+        clientVendor.setPhone("1-123-456-7890");
+        clientVendor.setWebsite("www.example.com");
+        clientVendor.setClientVendorType(ClientVendorType.CLIENT);
+        clientVendor.setAddress(address);
+        clientVendor.setCompany(company);
+
+        return clientVendor;
     }
 
-    @Test
-    void delete() {
-    }
 
-    @Test
-    void findById() {
-    }
 }

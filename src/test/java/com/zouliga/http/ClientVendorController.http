@@ -1,0 +1,59 @@
+
+### Admin login
+POST http://localhost:8080/realms/zouliga-dev/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type = password &
+client_id = Accounting-Project-Api &
+username = admin@greentech.com &
+password = Abc1 &
+client_secret = wV5ySbtiw7E2DppfgmMdK16adcEndRCy
+
+> {%
+    client.global.set("auth-token", response.body.access_token);
+%}
+
+### List all clients/vendors
+GET http://localhost:8081/api/v1/client-vendor/list
+Accept: application/json
+Authorization: Bearer {{auth-token}}
+
+### List all clients
+GET http://localhost:8081/api/v1/client-vendor/list/client
+Accept: application/json
+Authorization: Bearer {{auth-token}}
+
+
+
+### Create client/vendor
+POST http://localhost:8081/api/v1/client-vendor/create
+Content-Type: application/json
+Authorization: Bearer {{auth-token}}
+
+{
+  "clientVendorName": "Zouliga Tech",
+  "phone": "1-251-321-4141",
+  "website": "https://www.ower.com",
+  "clientVendorType": "CLIENT",
+  "address": {
+    "addressLine1": "123 second ava",
+    "addressLine2": "Suite 123",
+    "city": "Los Angeles",
+    "state": "Phoneix",
+    "country": "United States",
+    "zipCode": "65654-8989"
+  }
+}
+
+### List all vendors
+GET http://localhost:8081/api/v1/client-vendor/list/vendor
+Accept: application/json
+Authorization: Bearer {{auth-token}}
+
+
+
+
+
+
+
+
