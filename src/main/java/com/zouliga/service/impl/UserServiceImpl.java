@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(String username) {
-
+        // TODO: NEEDS REVISED
         User loggedInUser = getLoggedInUser();
         List<UserDto> userList = listAllUsersByCompany(getCompanyTitle());
         User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found"));

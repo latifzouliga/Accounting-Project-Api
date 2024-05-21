@@ -1,8 +1,9 @@
-# Accounting Application
+# <span style="color: #47a699;">Accounting Application</span>
 
-The `Accounting Application` is a Maven-based Spring Boot application, leveraging version `3.2.5` of Spring Boot and Java `21`. It's designed to provide accounting functionalities and integrates with tools and platforms like PostgreSQL, Docker, and AWS.
+The `Accounting Application` is a Maven-based Spring Boot application, leveraging version `3.2.5` of Spring Boot and Java `17`. It's designed to provide accounting functionalities and integrates with tools and platforms like PostgreSQL, Docker, and AWS.
 
-## Prerequisites
+
+# <span style="color: #47a699;">Prerequisites</span>
 
 Before you begin, ensure you have met the following requirements:
 
@@ -12,29 +13,29 @@ Before you begin, ensure you have met the following requirements:
 - Access to PostgreSQL (locally or through a service)
 
 
-## Setup & Running the Service
+
+# <span style="color: #47a699;">Setup & Running the Service</span>
 
 Depending on your operating system, follow the appropriate steps to get the service up and running:
 
-### For Windows Users:
 
-1. Navigate to the project root directory in your terminal.
-2. Run the following command:
-   ```bash docker-compose -f docker-compose-win.yaml up --remove-orphans```
-
-### For Mac Users:
-
-1. Navigate to the project root directory in your terminal.
-2. Run the following command:
-   ```bash docker compose up --remove-orphans -f docker-compose-mac.yaml ```
+<span style="color: #ada95c; font-weight: bold">Postgres:</span>
+``docker run -d --name pgdb -v ./pgdata:/var/lib/mysql/data/pgdata -e POSTGRES_USERNAME=postgres -e POSTGRES_PASSWORD=admin -p 5432:5432 postgres``
 
 
+<span style="color: #ada95c; font-weight: bold">Keycloak:</span>
+``docker run -d --name keycloak_22 -v ./keycloak:/opt/keycloak/data/h2 -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_A``
+
+<span style="color: #ada95c; font-weight: bold">Swagger specification</span>
+  can be accessed using this url ``http://localhost:8081/api/v1/swagger-ui/index.html``
 
 ---
 
-# Java and Spring Boot Coding Standards
 
-## 1. Code Formatting
+# <span style="color: #47a699;">Java and Spring Boot Coding Standards</span>
+
+
+## <span style="color: #476ba6;">1. Code Formatting</span>
 
 - **Indentation:**
     - Use 4 spaces for indentation, not tabs.
@@ -45,7 +46,8 @@ Depending on your operating system, follow the appropriate steps to get the serv
 - **Whitespace:**
     - Avoid trailing whitespaces.
 
-## 2. Naming Conventions
+
+## <span style="color: #476ba6;">2. Naming Conventions</span>
 
 - **Classes:**
     - Start with an uppercase and use CamelCase.
@@ -61,13 +63,14 @@ Depending on your operating system, follow the appropriate steps to get the serv
     - Use uppercase with underscores.
     - *Example:* `MAX_RETRY_COUNT`
 
-## 3. Comments
+## <span style="color: #476ba6;">3. Comments</span>
 
 - Write meaningful comments and avoid obvious comments.
 - Use Javadoc style comments for classes and methods.
 - Comment any code that might appear non-trivial or has business implications.
 
-## 4. Spring Boot Specifics
+
+## <span style="color: #476ba6;">4. Spring Boot Specifics</span>
 
 - **Annotations:**
     - Place Spring Boot's annotations in this order: `@SpringBootApplication`, `@RestController`, `@RequestMapping`, etc.
@@ -76,7 +79,7 @@ Depending on your operating system, follow the appropriate steps to get the serv
 - **Exception Handling:**
     - Use `@ControllerAdvice` and `@ExceptionHandler` to handle exceptions globally.
 
-## 5. General Guidelines
+## <span style="color: #476ba6;">5. General Guidelines</span>
 
 - **Single Responsibility Principle:**
     - A class should have only one reason to change.
@@ -89,13 +92,13 @@ Depending on your operating system, follow the appropriate steps to get the serv
 - **Unit Testing:**
     - Always write unit tests for your service layers. Aim for a high code coverage.
 
-## 6. Dependencies
+## <span style="color: #476ba6;">6. Dependencies</span>
 
 - Keep your dependencies up to date.
 - Avoid using deprecated libraries or methods.
 - Use Maven or Gradle's `scope` to ensure runtime-only libraries don't get bundled at compile-time.
 
-## 7. Database
+## <span style="color: #476ba6;">7. Database</span>
 
 - **Naming:**
     - Use snake_case for table and column names.
