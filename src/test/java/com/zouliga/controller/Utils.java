@@ -13,41 +13,30 @@ import java.util.Objects;
 
 public class Utils {
 
-    static String USERNAME;
-    static final String PASSWORD = "Abc1";
+    public static String USERNAME_ROOT = "root@cydeo.com";
+    public static String USERNAME_ADMIN = "admin@greentech.com";
+    public static String USERNAME_MANAGER = "manager@greentech.com";
+    public static String USERNAME_EMPLOYEE = "employee@bluetech.com";
+    public static final String PASSWORD = "Abc1";
 
 
-    static String getRootToken() {
-        USERNAME = "root@cydeo.com";
-        return getToken(USERNAME, PASSWORD);
+    public static String getRootToken() {
+        return getToken(USERNAME_ROOT, PASSWORD);
     }
 
-    static String getRootToken(String username,String password) {
-        return getToken(username,password);
+
+    public static String getAdminToken() {
+        return getToken(USERNAME_ADMIN, PASSWORD);
     }
 
-    static String getAdminToken() {
-        USERNAME = "admin@greentech.com";
-        return getToken(USERNAME, PASSWORD);
-    }
-    static String getAdminToken(String username,String password) {
-        return getToken(username,password);
+
+    public static String getManagerToken() {
+        return getToken(USERNAME_MANAGER, PASSWORD);
     }
 
-    static String getManagerToken() {
-        USERNAME = "manager@bluetech.com";
-        return getToken(USERNAME, PASSWORD);
-    }
-    static String getManagerToken(String username,String password) {
-        return getToken(username,password);
-    }
 
-    static String getEmployeeToken() {
-        USERNAME = "employee@bluetech.com";
-        return getToken(USERNAME, PASSWORD);
-    }
-    static String getEmployeeToken(String username,String password) {
-        return getToken(username,password);
+    public static String getEmployeeToken() {
+        return getToken(USERNAME_EMPLOYEE, PASSWORD);
     }
 
 
