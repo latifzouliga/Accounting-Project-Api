@@ -24,6 +24,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
@@ -42,6 +44,9 @@ class ClientVendorServiceImpTest {
     private MapperUtil mapperUtil = new MapperUtil(new ModelMapper());
 
 
+    /**
+     * List All Clients/Vendors: {@link ClientVendorServiceImp#listAllClientVendors(int, int)}
+     */
     @Test
     void listAllClientVendors() {
         Sort sort = Sort.by("clientVendorType").and(Sort.by("clientVendorName"));
@@ -65,6 +70,9 @@ class ClientVendorServiceImpTest {
     }
 
 
+    /**
+     * List All By ClientVendorType: {@link ClientVendorServiceImp#listAllByClientVendorType(String, int, int)}
+     */
     @Test
     void listAllByClientVendorType() {
         PageRequest pageRequest = PageRequest.of(0, 10)
@@ -96,6 +104,9 @@ class ClientVendorServiceImpTest {
 
     }
 
+    /**
+     * Create Client/Vendor: {@link ClientVendorServiceImp#create(ClientVendorDto)}
+     */
     @Test
     void create() {
 
@@ -118,25 +129,78 @@ class ClientVendorServiceImpTest {
 
     }
 
+
+    /**
+     * Update Client/Vendor: {@link ClientVendorServiceImp#update(Long, ClientVendorDto)}
+     */
     @Test
     void update() {
+
+        ClientVendor clientVendor = getClientVendor();
+        ClientVendorDto clientVendorDto = getClientVendorDto();
+
+        when(clientVendorRepository.findById(1L)).thenReturn(Optional.of(clientVendor));
+
+        ClientVendorDto updatedClientVendor = clientVendorService.update(1L, clientVendorDto);
+
+        verify(clientVendorRepository).findById(1L);
+        Assertions.assertEquals(clientVendorDto.getId(), updatedClientVendor.getId());
+
     }
 
+    /**
+     * Patch Client/Vendor: {@link ClientVendorServiceImp#patch(Long, Map)}
+     */
     @Test
     void patch() {
+        ClientVendor clientVendor = getClientVendor();
+        ClientVendorDto clientVendorDto = getClientVendorDto();
+
+        when(clientVendorRepository.findById(1L)).thenReturn(Optional.of(clientVendor));
+
+        ClientVendorDto updatedClientVendor = clientVendorService.update(1L, clientVendorDto);
+
+        verify(clientVendorRepository).findById(1L);
+        System.out.println(updatedClientVendor.getWebsite());
+        Assertions.assertEquals(clientVendorDto.getWebsite(), updatedClientVendor.getWebsite());
+
     }
 
+    /**
+     * Delete Client/Vendor: {@link ClientVendorServiceImp#delete(Long)}
+     */
     @Test
     void delete() {
+        ClientVendor clientVendor = getClientVendor();
+
+        User loggedInUser = getGetLoggedInUser();
+
+        when(securityService.getLoggedInUser()).thenReturn(loggedInUser);
+        when(clientVendorRepository.findById(1L)).thenReturn(Optional.of(clientVendor));
+
+        clientVendorService.delete(1L);
+
+        verify(clientVendorRepository).findById(1L);
+
     }
 
+    /**
+     * Find By Id: {@link ClientVendorServiceImp#findById(Long)}
+     */
     @Test
     void findById() {
+        ClientVendor clientVendor = getClientVendor();
+        ClientVendorDto clientVendorDto = getClientVendorDto();
+
+        when(clientVendorRepository.findById(1L)).thenReturn(Optional.of(clientVendor));
+        doReturn(clientVendorDto).when(mapperUtil).convert(any(ClientVendor.class), any(ClientVendorDto.class));
+
+        ClientVendorDto returnedClientVendor = clientVendorService.findById(1L);
+
+        verify(clientVendorRepository).findById(1L);
+        Assertions.assertEquals(clientVendorDto,returnedClientVendor);
+
     }
-
-
-
-
 
 
     /**

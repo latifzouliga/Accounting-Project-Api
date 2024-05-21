@@ -5,7 +5,7 @@ Content-Type: application/x-www-form-urlencoded
 
 grant_type = password &
 client_id = Accounting-Project-Api &
-username = root@cydeo.com &
+username = admin@greentech.com &
 password = Abc1 &
 client_secret = wV5ySbtiw7E2DppfgmMdK16adcEndRCy
 
@@ -16,7 +16,7 @@ client_secret = wV5ySbtiw7E2DppfgmMdK16adcEndRCy
 
 ### List all Users
 GET http://localhost:8081/api/v1/users/list
-Accept: application/xml
+Accept: application/json
 Authorization: Bearer {{auth-token}}
 
 
