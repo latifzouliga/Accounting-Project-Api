@@ -21,12 +21,9 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestControllerAdvice
-// interceptor: if any exception happens in this application, it needs to be intercepted and come to this class first
 public class GlobalExceptionHandler {
 
-    // when an exception comes to this class, one of the 3 methods will be executed
 
-//     any exception related with TicketingProjectException.class
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ResponseWrapper> resourceNotFoundException(ResourceNotFoundException se) {
         String message = se.getMessage();
